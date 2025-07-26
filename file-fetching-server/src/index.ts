@@ -5,37 +5,52 @@ import csv from 'csv-parser';
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = 3000;
 
-app.get("/fetch-file", (req, res) => {
+function isArray(param: any) {
+    return Array.isArray(param)
+}   
 
-    const filePath = req.query.path as string;
+function parseCSV(filePath: string): Promise<Record<string, string>[]> {
+    return new Promise((resolve, reject) => {
+        const results: Record<string, string>[] = [];
+        const resolvedFilePath = path.resolve(filePath);
+        fs.createReadStream(resolvedFilePath)
+        .pipe(csv())
+        .on("data", (data) => {results.push(data)})
+        .on("end", () => resolve(results))
+        .on("error", (err) => reject(err));
+    });
+}
 
-    if (!filePath) {
-        return res.status(400).json({ error: "Path query parameter is empty!"});
+app.post("/fetch-csvs", async (req, res) => {
+    const filePaths: string[] = req.body.filePaths;
+
+    console.log("filePaths", filePaths);
+
+    if (!isArray(filePaths) || filePaths.length == 0) {
+        return res.status(400).json({ error: "Please provide atleast one path"});
     }
 
-    const resolvedPath = path.resolve(filePath);
+    try {
+        const allCsvPromises = filePaths.map(parseCSV);
+        console.log(allCsvPromises);
+        const allDataArrays = await Promise.all(allCsvPromises);
+        const mergedData = allDataArrays.flat();
 
-    console.log("Trying to read : ", resolvedPath);
-
-    const rows: Record<string, string>[] = []
-
-    fs.createReadStream(resolvedPath)
-    .pipe(csv())
-    .on("data", (data) => {rows.push(data)})
-    .on("end", () => {
         res.status(200).json({
-            message: "CSV parsed successfully",
-            rowCount: rows.length,
-            data: rows
-        });
-    })
-    .on("error", (err) => {
-        console.error("Error parsing CSV : ", err);
-        res.status(500).json({ error: "Error parsing CSV file."});
-    });
-});
+            message: "CSV files merged successfully",
+            rowCount: mergedData.length,
+            data: mergedData
+        })
+    }
+    catch (err) {
+        console.error("Error processing files: ", err);
+        res.status(500).json({ error: "Failed to fetch or parse CSV files"})
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
