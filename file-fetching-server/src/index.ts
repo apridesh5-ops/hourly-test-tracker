@@ -36,7 +36,6 @@ app.post("/fetch-csvs", async (req, res) => {
 
     try {
         const allCsvPromises = filePaths.map(parseCSV);
-        console.log(allCsvPromises);
         const allDataArrays = await Promise.all(allCsvPromises);
         const mergedData = allDataArrays.flat();
 
