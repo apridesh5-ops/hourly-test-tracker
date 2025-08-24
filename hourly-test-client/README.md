@@ -3,6 +3,7 @@
 ## Logins
 
 ### Engineering Login (Admin User)
+Needs password authentication
 
 #### Input Page
 
