@@ -1,8 +1,68 @@
 import { useState } from 'react';
-import { Button, Card, CardContent, Typography, Box } from '@mui/material';
+import { Button, Card, CardContent, Typography, Box, TextField, Alert} from '@mui/material';
 
 export const LoginPage = () => {
-    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
+    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>('engineering');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    if (loginType === 'engineering' && !isAuthenticated) {
+        return (
+            <Box 
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+                sx={{ backgroundColor: "#5353c6"}}
+                >
+                <Card sx={{ minWidth: 400 }}>
+                    <CardContent>
+                        <Typography variant='h5' gutterBottom align='center'>
+                            Engineering Login
+                        </Typography>
+                        <Typography variant='body2' gutterBottom align='center' color='text.secondary'>
+                            Enter admin password
+                        </Typography>
+
+                        <Box component="form" >
+                            <TextField
+                                label="Password" 
+                                type='password'
+                                fullWidth     
+                                value={password}
+                                margin="normal"
+                                required
+                                error={!!error}
+                            />
+
+                            {error && (
+                                <Alert severity='error' sx={{ mt: 1}}>
+                                    {error}
+                                </Alert>
+                            )}
+
+                            <Box display="flex" gap={2} mt={3}>
+                                <Button
+                                    variant='outlined'
+                                    fullWidth
+                                >
+                                    Back
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    type='submit'
+                                    fullWidth
+                                    disabled={!password}>
+                                    Login
+                                </Button>
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Card>       
+            </Box>
+        )
+    }
 
     return (
         <Box 
