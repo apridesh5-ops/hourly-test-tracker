@@ -7,6 +7,29 @@ export const LoginPage = () => {
     const [error, setError] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    const handleEngineeringLogin = () => {
+        // replace with actual auth logic
+        const correctPassword = 'engineering_user'; // store this securly in env variables
+
+        if(password === correctPassword) {
+            setIsAuthenticated(true);
+            setError('');
+            //redirect to engineering dashboard
+        } else {
+            setError('Invalid Password!');
+            setPassword('');
+        }
+    };
+
+    const handleProductionLogin = () => {
+        // production login doesn't need password authentication
+        setIsAuthenticated(true);
+        setLoginType('production');
+        // redirect to production form  
+    }
+
+
+
     if (loginType === 'engineering' && !isAuthenticated) {
         return (
             <Box 
@@ -25,12 +48,15 @@ export const LoginPage = () => {
                             Enter admin password
                         </Typography>
 
-                        <Box component="form" >
+                        <Box component="form" 
+                             onSubmit={(e) => { e.preventDefault();
+                                                handleEngineeringLogin();}}>
                             <TextField
                                 label="Password" 
                                 type='password'
                                 fullWidth     
                                 value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 margin="normal"
                                 required
                                 error={!!error}
