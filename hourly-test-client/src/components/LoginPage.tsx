@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Button, Card, CardContent, Typography, Box, TextField, Alert} from '@mui/material';
+import { Button, Card, CardContent, Typography, Box, TextField, Alert, InputAdornment, IconButton} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export const LoginPage = () => {
     const [loginType, setLoginType] = useState<'engineering' | 'production' | null>('engineering');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleEngineeringLogin = () => {
         // replace with actual auth logic
@@ -28,8 +30,10 @@ export const LoginPage = () => {
         // redirect to production form  
     }
 
-
-
+    const handlePasswordVisibilty = () => {
+        setShowPassword((show) => !show)
+    };
+ 
     if (loginType === 'engineering' && !isAuthenticated) {
         return (
             <Box 
@@ -53,13 +57,27 @@ export const LoginPage = () => {
                                                 handleEngineeringLogin();}}>
                             <TextField
                                 label="Password" 
-                                type='password'
+                                type={showPassword ? 'text' : 'password'}
                                 fullWidth     
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 margin="normal"
                                 required
                                 error={!!error}
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="Password Visibilty"
+                                                    onClick={handlePasswordVisibilty}
+                                                    edge="end">
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }
+                                }}
                             />
 
                             {error && (
