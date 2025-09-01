@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Card, CardContent, Typography, Box, TextField, Alert, InputAdornment, IconButton} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-export const LoginPage = () => {
+const LoginPage = () => {
     const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');

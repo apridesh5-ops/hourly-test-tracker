@@ -24,7 +24,7 @@ interface EngineeringFormData {
     time: Date | null;
 }
 
-export const EngineeringForm = () => {
+const EngineeringForm = () => {
     const [formData, setFormData] = useState<EngineeringFormData>({
         paths: {
             machine1: '',
@@ -38,9 +38,15 @@ export const EngineeringForm = () => {
 
 
   return (
-    <LocalizationProvider>
-        
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Box>
+            <Typography>
+                Engineering Dashboard
+            </Typography>
+        </Box>
     </LocalizationProvider>
   )
 
 };
+
+export default EngineeringForm;
