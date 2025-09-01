@@ -3,7 +3,7 @@ import { Button, Card, CardContent, Typography, Box, TextField, Alert, InputAdor
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export const LoginPage = () => {
-    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>('engineering');
+    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -90,6 +90,7 @@ export const LoginPage = () => {
                                 <Button
                                     variant='outlined'
                                     fullWidth
+                                    onClick={() => setLoginType(null)}
                                 >
                                     Back
                                 </Button>
