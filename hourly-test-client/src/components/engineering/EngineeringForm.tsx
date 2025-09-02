@@ -39,10 +39,21 @@ const EngineeringForm = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Box>
-            <Typography>
+        <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
+            <Typography variant='h4' gutterBottom align='center'>
                 Engineering Dashboard
             </Typography>
+
+            <Card sx={{ mb: 3 }}>
+                <CardContent>
+                    <Typography variant='h6' gutterBottom>
+                        Machine Paths (UNC Format)
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary' gutterBottom>
+                        Example: \\192.168.1.100\shared\data.csv
+                    </Typography>
+                </CardContent>
+            </Card>
         </Box>
     </LocalizationProvider>
   )
