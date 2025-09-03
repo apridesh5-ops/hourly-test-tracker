@@ -1,9 +1,74 @@
-import LoginPage from './components/LoginPage'
-import './App.css'
+import { createTheme, ThemeProvider, CssBaseline, Box } from '@mui/material';
+import { useState } from 'react';
+import LoginPage from './components/LoginPage';
+import './App.css';
+import EngineeringForm from './components/engineering/EngineeringForm';
 
 function App() {
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1976d2',
+        light: '#42a5f5',
+        dark: '#1565c0'
+      },
+      secondary: {
+        main: '#dc004e'
+      },
+      background: {
+        default: '#f5f7fa',
+        paper: '#ffffff'
+      }
+    },
+    typography: {
+      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      h4: {
+        fontWeight: 600,
+      },
+      h6: {
+        fontWeight: 500,
+      }
+    },
+    shape: {
+      borderRadius: 12
+    },
+    shadows: [
+      'none',
+      '0px 2px 4px rgba(0,0,0,0.05)',
+      '0px 4px 8px rgba(0,0,0,0.08)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+      '0px 8px 16px rgba(0,0,0,0.12)',
+    ],
+  })
+
   return (
-    <LoginPage />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+        <LoginPage />
+      </Box>
+    </ThemeProvider>
   );
 }
 
