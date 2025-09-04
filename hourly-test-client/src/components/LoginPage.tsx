@@ -1,13 +1,31 @@
 import { useState } from 'react';
-import { Button, Card, CardContent, Typography, Box, TextField, Alert, InputAdornment, IconButton} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box,
+         Card,
+         CardContent,
+         Typography,
+         Button,
+         TextField,
+         Alert,
+         Container,
+         Paper,
+         Divider,
+         Avatar,
+         InputAdornment,
+         IconButton } from '@mui/material';
+import { Engineering,
+         Group,
+         Lock,
+         Visibility,
+         VisibilityOff,
+         Timeline } from '@mui/icons-material';
 
 const LoginPage = () => {
-    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
+    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>('engineering');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleEngineeringLogin = () => {
         // replace with actual auth logic
@@ -33,133 +51,112 @@ const LoginPage = () => {
     const handlePasswordVisibilty = () => {
         setShowPassword((show) => !show)
     };
- 
-    if (loginType === 'engineering' && !isAuthenticated) {
-        return (
-            <Box 
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-                sx={{ backgroundColor: "#5353c6"}}
-                >
-                <Card sx={{ minWidth: 400 }}>
-                    <CardContent>
-                        <Typography variant='h5' gutterBottom align='center'>
-                            Engineering Login
-                        </Typography>
-                        <Typography variant='body2' gutterBottom align='center' color='text.secondary'>
-                            Enter admin password
-                        </Typography>
 
-                        <Box component="form" 
-                             onSubmit={(e) => { e.preventDefault();
-                                                handleEngineeringLogin();}}>
-                            <TextField
-                                label="Password" 
+    if (loginType === 'engineering') {
+        return (
+            <Container>
+                <Box
+                    sx={{
+                        minHeight: '100vh',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        //py: 4
+                    }}
+                >
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            p: 4,
+                            width: '100%',
+                            // background: 'linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%)'
+                        }}
+                    >
+                        <Box sx={{ textAlign: 'center', mb: 4}}>
+                            <Avatar sx={{ mx: 'auto',
+                                          mb: 2,
+                                          bgcolor: 'primary.main',
+                                          width: 56,
+                                          height: 56
+                            }}>
+                                <Engineering fontSize='large' />
+                            </Avatar>
+                            <Typography variant='h4' gutterBottom>
+                                Engineering Portal
+                            </Typography>
+                            <Typography variant='body1' color='text.secondary'>
+                                Administrative Access Required
+                            </Typography>
+                        </Box>
+
+                        <Box
+                            component="form"
+                            onSubmit={(e) => { e.preventDefault();
+                                               handleEngineeringLogin();
+                            }}>
+                            <TextField 
+                                fullWidth
                                 type={showPassword ? 'text' : 'password'}
-                                fullWidth     
+                                label="Admin Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 margin="normal"
                                 required
                                 error={!!error}
+                                disabled={loading}
                                 slotProps={{
                                     input: {
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <Lock color='action'/>
+                                            </InputAdornment>
+                                        ),
                                         endAdornment: (
-                                            <InputAdornment position="end">
+                                            <InputAdornment position='end'>
                                                 <IconButton
-                                                    aria-label="Password Visibilty"
-                                                    onClick={handlePasswordVisibilty}
-                                                    edge="end">
-                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    edge='end'>
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
                                             </InputAdornment>
                                         )
                                     }
                                 }}
+                                sx={{ mb: 2 }}
                             />
 
                             {error && (
-                                <Alert severity='error' sx={{ mt: 1}}>
+                                <Alert severity='error' sx={{ mb: 2 }}>
                                     {error}
                                 </Alert>
                             )}
 
-                            <Box display="flex" gap={2} mt={3}>
+                            <Box sx={{ display: 'flex', gap: 2}}>
                                 <Button
                                     variant='outlined'
                                     fullWidth
                                     onClick={() => setLoginType(null)}
+                                    size='large'
                                 >
                                     Back
                                 </Button>
+
                                 <Button
                                     variant='contained'
                                     type='submit'
+                                    disabled={!password || loading}
                                     fullWidth
-                                    disabled={!password}>
-                                    Login
+                                    size='large'
+                                >
+                                    {loading ? 'Authenticating...' : 'Login'}
                                 </Button>
                             </Box>
                         </Box>
-                    </CardContent>
-                </Card>       
-            </Box>
+                    </Paper>
+                </Box>
+            </Container>
         )
     }
-
-    return (
-        <Box 
-            display="flex" 
-            justifyContent="center" 
-            alignItems="center" 
-            minHeight="100vh"
-            sx={{
-                backgroundColor: 'gray'
-            }}>
-            <Card sx={{ minWidth: 400}}>
-                <CardContent>
-                    <Typography variant='h4' gutterBottom align='center'>
-                        Hourly Test Tracker
-                    </Typography>
-                    <Typography variant="body1" gutterBottom align='center' color='text.secondary'>
-                        Select your login type  
-                    </Typography>
-
-                    <Box 
-                        display="flex" 
-                        flexDirection="column"
-                        gap={2}
-                        mt={3}>
-                        <Button 
-                            variant='contained'
-                            onClick={() => setLoginType('engineering')}
-                            sx={{
-                                bgcolor: 'grey.700',
-                                '&:hover': {
-                                    bgcolor: 'grey.800',
-                                }
-                            }}>
-                            Engineering
-                        </Button>
-                        <Button 
-                            variant='contained' 
-                            onClick={() => setLoginType('production')}
-                            sx={{
-                                bgcolor: 'black',
-                                '&:hover': {
-                                    bgcolor: '#333333',
-                                }
-                            }}>
-                            Production
-                        </Button>
-                    </Box>
-                </CardContent>
-            </Card>
-
-        </Box>
-    )
 }
 
 export default LoginPage;
