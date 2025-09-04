@@ -4,9 +4,7 @@ import LoginPage from './components/LoginPage';
 import './App.css';
 import EngineeringForm from './components/engineering/EngineeringForm';
 
-function App() {
-
-  const theme = createTheme({
+const theme = createTheme({
     palette: {
       primary: {
         main: '#1976d2',
@@ -60,6 +58,19 @@ function App() {
       '0px 8px 16px rgba(0,0,0,0.12)',
       '0px 8px 16px rgba(0,0,0,0.12)',
     ],
+  })
+
+  interface User {
+    type: 'engineering' | 'production' | null;
+    authenticated: boolean
+  }
+
+
+function App() {
+
+  const [user, setUser] = useState<User>({
+    type: null,
+    authenticated: false,
   })
 
   return (
