@@ -20,7 +20,7 @@ import { Engineering,
          Timeline } from '@mui/icons-material';
 
 const LoginPage = () => {
-    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>('engineering');
+    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,7 +61,7 @@ const LoginPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        //py: 4
+                        py: 4
                     }}
                 >
                     <Paper
@@ -69,7 +69,7 @@ const LoginPage = () => {
                         sx={{
                             p: 4,
                             width: '100%',
-                            // background: 'linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%)'
+                            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%)'
                         }}
                     >
                         <Box sx={{ textAlign: 'center', mb: 4}}>
@@ -157,6 +157,66 @@ const LoginPage = () => {
             </Container>
         )
     }
+
+    return (
+        <Container>
+            <Box>
+                <Card>
+                    <CardContent>
+                        <Box sx={{ textAlign: 'center', mb: 6}}>
+                            <Avatar sx={{
+                                mx: 'auto',
+                                mb: 3,
+                                bgcolor: 'primary.main',
+                                width: 80
+                            }}>
+                                <Timeline fontSize='large' />
+                            </Avatar>
+                            <Typography variant='h3' gutterBottom sx={{ fontWeight: 600 }}>
+                                Hourly Test Tracker
+                            </Typography>
+                            <Typography variant='h6' color='text.secondary'>
+                                Select your access level to continue
+                            </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row'}}}>
+                            <Paper
+                                elevation={2}
+                                sx={{
+                                    flex: 1,
+                                    p: 4,
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-4px)',
+                                        boxShadow: 3
+                                    }
+                                }}
+                                onClick={() => setLoginType('engineering')}
+                            >
+                                <Avatar sx={{ mx: 'auto', mb: 2, bgcolor: 'primary.main', width: 64, height: 64}}>
+                                    <Engineering fontSize='large' />
+                                </Avatar>
+                                <Typography variant='h5' gutterBottom>
+                                    Engineering
+                                </Typography>
+                                <Typography variant='body1' color='text.secondary' gutterBottom>
+                                    Administrative access with full system controls
+                                </Typography>
+                                <Box sx={{ mt: 3}}>
+                                    <Button variant='contained' size='large' fullWidth>
+                                        Admin Login
+                                    </Button>
+                                </Box>
+                            </Paper>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Box>
+        </Container>
+    )
 }
 
 export default LoginPage;
