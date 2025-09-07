@@ -2,7 +2,7 @@ import { createTheme, ThemeProvider, CssBaseline, Box } from '@mui/material';
 import { useState } from 'react';
 import LoginPage from './components/LoginPage';
 import './App.css';
-import EngineeringForm from './components/engineering/EngineeringForm';
+import EngineeringDashboard from './components/engineering/EngineeringDashboard';
 
 const theme = createTheme({
     palette: {
@@ -66,18 +66,28 @@ const theme = createTheme({
   }
 
 
-function App() {
-
+const App = () => {
   const [user, setUser] = useState<User>({
     type: null,
     authenticated: false,
   })
 
+const handleLogout = () => {
+  setUser({ type: null, authenticated: false})
+}
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-        <LoginPage />
+        {!user.authenticated && (
+          <LoginPage onLogin={setUser} />
+        )}
+
+        {user.authenticated && user.type === 'engineering' && (
+          <EngineeringDashboard onLogout={handleLogout} />
+        )}
+
       </Box>
     </ThemeProvider>
   );

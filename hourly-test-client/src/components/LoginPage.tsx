@@ -19,42 +19,44 @@ import { Engineering,
          VisibilityOff,
          Timeline } from '@mui/icons-material';
 
-const LoginPage = () => {
+
+interface LoginType {
+    onLogin: (user: { 
+        type: 'engineering' | 'production';
+        authenticated: boolean
+    }) => void
+} 
+
+const LoginPage = ({ onLogin }: LoginType) => {
     const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleEngineeringLogin = () => {
-        // replace with actual auth logic
-        const correctPassword = 'engineering_user'; // store this securly in env variables
+    const handleEngineeringLogin = async () => {
+        setLoading(true);
 
-        if(password === correctPassword) {
-            setIsAuthenticated(true);
-            setError('');
-            //redirect to engineering dashboard
-        } else {
-            setError('Invalid Password!');
-            setPassword('');
-        }
+        // simulate authentication
+        setTimeout(() => {
+            if (password === 'admin123') {
+                onLogin({ type: 'engineering', authenticated: true });
+            } else {
+                setError('Invalid password! Please try again.');
+            }
+            setLoading(false);
+        }, 500);
     };
 
     const handleProductionLogin = () => {
-        // production login doesn't need password authentication
-        setIsAuthenticated(true);
-        setLoginType('production');
-        // redirect to production form  
-    }
-
-    const handlePasswordVisibilty = () => {
-        setShowPassword((show) => !show)
+        setTimeout(() => {
+            onLogin({ type: 'production', authenticated: true })
+        }, 500);
     };
 
     if (loginType === 'engineering') {
         return (
-            <Container>
+            <Container maxWidth='sm'>
                 <Box
                     sx={{
                         minHeight: '100vh',
@@ -159,10 +161,22 @@ const LoginPage = () => {
     }
 
     return (
-        <Container>
-            <Box>
-                <Card>
-                    <CardContent>
+        <Container maxWidth='md'>
+            <Box
+                sx={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    py: 4
+                }}>
+                <Card
+                    elevation={3}
+                    sx={{
+                        width: '100%',
+                        background: 'linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%)'
+                    }}>
+                    <CardContent sx={{ p: 6 }}>
                         <Box sx={{ textAlign: 'center', mb: 6}}>
                             <Avatar sx={{
                                 mx: 'auto',
