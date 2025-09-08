@@ -21,6 +21,7 @@ import {
     FolderOpen, 
     Search,
     Storage,
+    TextFormatRounded,
 } from '@mui/icons-material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -43,6 +44,10 @@ interface Logout {
 }
 
 const EngineeringDashboard = ( { onLogout }: Logout ) => {
+    const [error, setError] = useState('');
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [showResults, setShowResults] = useState(false);
     const [formData, setFormData] = useState<EngineeringFormData>({
         paths: {
             machine1: '',
@@ -126,6 +131,63 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                       ))}
                     </Grid>
                   </Paper>
+
+                  <Paper elevation={2} sx={{ p: 4 }}>
+                    <Typography variant='h6' gutterBottom>
+                      Filter Parameters
+                    </Typography>
+
+                    <Grid container spacing={1}>
+                      
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <DatePicker
+                          label="Target Date"
+                          value={formData.date}
+                          onChange={(newValue) => setFormData(prev => ({ ...prev, date: newValue }))} 
+                        />
+                      </Grid>
+
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TimePicker
+                          label="Minimum Time"
+                          value={formData.time}
+                          onChange={(newValue) => setFormData(prev => ({ ...prev, time: newValue }))}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+
+                <Grid size={{ xs: 12, lg: 4 }}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant='h6' gutterBottom>
+                        Quick Actions
+                      </Typography>
+
+                      {error && (
+                        <Alert severity='error' sx={{ mb: 2 }}>
+                          {error}
+                        </Alert>
+                      )}
+
+                      <Button
+                        variant='contained'
+                        size='large'
+                        fullWidth
+                        onClick={() => {}}
+                        disabled={loading}
+                        startIcon={<Search />}
+                        sx={{ mb: 2 }}
+                      >
+                        {loading ? 'Processing...' : 'Fetch & Analyze Data'}
+                      </Button>
+
+                      <Typography variant='body2' color='text.secondary'>
+                        This will merge data from all four machines and apply the specified filters.
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 </Grid>
               </Grid>
             </Container>
