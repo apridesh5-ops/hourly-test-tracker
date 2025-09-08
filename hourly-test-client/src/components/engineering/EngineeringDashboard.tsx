@@ -159,6 +159,7 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                 </Grid>
 
                 <Grid size={{ xs: 12, lg: 4 }}>
+
                   <Card>
                     <CardContent>
                       <Typography variant='h6' gutterBottom>
@@ -188,6 +189,7 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                       </Typography>
                     </CardContent>
                   </Card>
+                  
                 </Grid>
               </Grid>
             </Container>
