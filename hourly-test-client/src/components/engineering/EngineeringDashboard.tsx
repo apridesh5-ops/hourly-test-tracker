@@ -40,7 +40,7 @@ interface EngineeringFormData {
 }
 
 interface Logout {
-  onLogout: () => void
+  onLogout: () => void;
 }
 
 const EngineeringDashboard = ( { onLogout }: Logout ) => {
