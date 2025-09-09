@@ -225,6 +225,49 @@ const LoginPage = ({ onLogin }: LoginType) => {
                                     </Button>
                                 </Box>
                             </Paper>
+
+                            <Divider orientation='vertical' flexItem sx={{ display: { xs: 'none', md: 'block'} }} />
+                            <Divider sx={{ display: { xs: 'block', md: 'none' } }} />
+
+                            <Paper
+                                elevation={2}
+                                sx={{
+                                    flex: 1,
+                                    p: 4,
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-4px)',
+                                        boxShadow: 3
+                                    }
+                                }}
+                            >
+                                <Avatar sx={{
+                                    mx: 'auto',
+                                    mb: 2,
+                                    bgcolor: 'secondary.main',
+                                    width: 64,
+                                    height: 64
+                                }}>
+                                    <Group fontSize='large' />
+                                </Avatar>
+
+                                <Typography variant='h5' gutterBottom>
+                                    Production
+                                </Typography>
+
+                                <Typography variant='body1' color='text.secondary' gutterBottom>
+                                    Public access for viewing and searching data
+                                </Typography>
+
+                                <Box sx={{ mt: 3 }}>
+                                    <Button  variant='outlined' size='large' fullWidth>
+                                        Public Access
+                                    </Button>
+                                </Box>
+                            </Paper>
+
                         </Box>
                     </CardContent>
                 </Card>
