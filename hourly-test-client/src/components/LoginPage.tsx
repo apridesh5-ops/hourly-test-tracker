@@ -51,7 +51,7 @@ const LoginPage = ({ onLogin }: LoginType) => {
     const handleProductionLogin = () => {
         setTimeout(() => {
             onLogin({ type: 'production', authenticated: true })
-        }, 500);
+        }, 10);
     };
 
     if (loginType === 'engineering') {
@@ -241,6 +241,10 @@ const LoginPage = ({ onLogin }: LoginType) => {
                                         transform: 'translateY(-4px)',
                                         boxShadow: 3
                                     }
+                                }}
+                                onClick={() => {
+                                    setLoginType('production');
+                                    handleProductionLogin();
                                 }}
                             >
                                 <Avatar sx={{

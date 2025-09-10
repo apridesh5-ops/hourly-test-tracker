@@ -29,6 +29,8 @@ interface Logout {
 }
 
 const ProductionDashboard = ({ onLogout }: Logout) => {
+    const [searchParams, setSearchParams] = useState({ 
+    });
     return (
         <Box>
             Production Dashboard

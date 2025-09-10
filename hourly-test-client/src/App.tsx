@@ -3,6 +3,7 @@ import { useState } from 'react';
 import LoginPage from './components/LoginPage';
 import './App.css';
 import EngineeringDashboard from './components/engineering/EngineeringDashboard';
+import ProductionDashboard from './components/production/ProductionDashboard';
 
 const theme = createTheme({
     palette: {
@@ -80,12 +81,17 @@ const handleLogout = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+        
         {!user.authenticated && (
           <LoginPage onLogin={setUser} />
         )}
 
         {user.authenticated && user.type === 'engineering' && (
           <EngineeringDashboard onLogout={handleLogout} />
+        )}
+
+        {user.authenticated && user.type === 'production' && (
+          <ProductionDashboard onLogout={handleLogout} />
         )}
 
       </Box>
