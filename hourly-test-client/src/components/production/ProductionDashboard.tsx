@@ -71,9 +71,27 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
     // }
 
     return (
-        <Box>
-            Production Dashboard
-        </Box>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position='static' elevation={2}>
+                    <Toolbar>
+                        <Group sx={{ mr: 2 }} />
+                        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+                            Production Dashboard
+                        </Typography>
+                        <Chip
+                            label='Public Access'
+                            color='secondary'
+                            size='small'
+                            sx={{ mr: 2 }}
+                        />
+                        <IconButton color='inherit' onClick={onLogout}>
+                            <Logout />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+        </LocalizationProvider>
     )
 }
 
