@@ -90,6 +90,34 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
+
+                <Container maxWidth="lg" sx={{ py: 4 }}>
+                    <Typography variant='h4' gutterBottom sx={{ mb: 4 }}>
+                        Test Data Search
+                    </Typography>
+
+                    <Paper elevation={2} sx={{ p: 4 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                            <FilterList sx={{ mr: 2, color: 'primary.main'}}/>
+                            <Typography variant='h6'>
+                                Search Parameters
+                            </Typography>
+                        </Box>
+
+                        <Grid container spacing={3}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <DatePicker
+                                    label="Date"
+                                    value={searchParams.date}
+                                    onChange={
+                                        (newValue) => {setSearchParams(prev => ({ ...prev, date: newValue }))}
+                                    }
+                                    //renderInput not working
+                                />
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </Container>
             </Box>
         </LocalizationProvider>
     )

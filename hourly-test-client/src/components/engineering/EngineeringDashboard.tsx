@@ -22,6 +22,7 @@ import {
     Search,
     Storage,
     TextFormatRounded,
+    FilterList 
 } from '@mui/icons-material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -133,9 +134,13 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                   </Paper>
 
                   <Paper elevation={2} sx={{ p: 4 }}>
-                    <Typography variant='h6' gutterBottom>
-                      Filter Parameters
-                    </Typography>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                      <FilterList sx={{ mr: 2, color: 'primary.main'}}/>
+                      <Typography variant='h6'>
+                          Filter Parameters
+                      </Typography>
+                    </Box>
 
                     <Grid container spacing={1}>
                       
@@ -143,7 +148,8 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                         <DatePicker
                           label="Target Date"
                           value={formData.date}
-                          onChange={(newValue) => setFormData(prev => ({ ...prev, date: newValue }))} 
+                          onChange={(newValue) => setFormData(prev => ({ ...prev, date: newValue }))}
+                          // renderInput not working
                         />
                       </Grid>
 
@@ -152,6 +158,7 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                           label="Minimum Time"
                           value={formData.time}
                           onChange={(newValue) => setFormData(prev => ({ ...prev, time: newValue }))}
+                          // renderInput not working
                         />
                       </Grid>
                     </Grid>
