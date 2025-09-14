@@ -105,6 +105,7 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                         </Box>
 
                         <Grid container spacing={3}>
+                            
                             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                                 <DatePicker
                                     label="Date"
@@ -115,6 +116,29 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                                     //renderInput not working
                                 />
                             </Grid>
+
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <TimePicker
+                                    label="Start Time"
+                                    value={searchParams.startTime}
+                                    onChange={
+                                        (newValue) => {setSearchParams(prev => ({...prev, startTime: newValue }))}
+                                    }
+                                    //renderInput not working
+                                />
+                            </Grid>
+
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <TimePicker
+                                    label="End Time"
+                                    value={searchParams.endTime}
+                                    onChange={
+                                        (newValue) => {setSearchParams(prev => ({...prev, endTime: newValue }))}
+                                    }
+                                    //renderInput not working
+                                />
+                            </Grid>
+
                         </Grid>
                     </Paper>
                 </Container>
