@@ -148,12 +148,39 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                                     placeholder='Enter test ID'
                                 />
                             </Grid>
+                            
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    label="Shift"
+                                    value={searchParams.shift}
+                                    onChange={(e) => setSearchParams( prev => ({ ...prev, shift: e.target.value }))}
+                                >
+                                    <MenuItem value="">All Shifts</MenuItem>
+                                    <MenuItem value="A">Shift A</MenuItem>
+                                    <MenuItem value="B">Shift B</MenuItem>
+                                    <MenuItem value="C">Shift C</MenuItem>
+                                </TextField>
+                            </Grid>
 
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <Button
+                                    variant='contained'
+                                    size='large'
+                                    fullWidth
+                                    onClick={handleSearch}
+                                    disabled={loading}
+                                    startIcon={<Search />}
+                                    sx={{ height: '56px' }}
+                                >
+                                    {loading ? 'Searching...' : 'Search'}
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Paper>
                 </Container>
             </Box>
-            
         </LocalizationProvider>
     )
 }
