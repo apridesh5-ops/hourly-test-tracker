@@ -153,6 +153,7 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                     </Paper>
                 </Container>
             </Box>
+            
         </LocalizationProvider>
     )
 }
