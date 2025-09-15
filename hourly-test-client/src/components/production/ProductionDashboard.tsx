@@ -139,6 +139,16 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                                 />
                             </Grid>
 
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <TextField
+                                    fullWidth
+                                    label="Test ID"
+                                    value={searchParams.testId}
+                                    onChange={(e) => setSearchParams( prev => ({ ...prev, testId: e.target.value }))} 
+                                    placeholder='Enter test ID'
+                                />
+                            </Grid>
+
                         </Grid>
                     </Paper>
                 </Container>
