@@ -66,9 +66,9 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
         }, 1000)
     }
 
-    // if (showResults) {
-    //     return <DataTable data={data} onBack={() => setShowResults(false)} userType="production" />;
-    // }
+    if (showResults) {
+        return <DataTable data={data} onBack={() => setShowResults(false)} userType="production" />;
+    }
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>

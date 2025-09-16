@@ -49,7 +49,25 @@ const DataTable = ({ data, onBack, userType }: DataTableProps) => {
     ]
 
     return (
-        <Box> Hello World </Box>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position='static' elevation={2}>
+                <Toolbar>
+                    { userType === 'engineering' ? <Engineering sx={{ mr: 2 }} /> : <Group sx={{ mr: 2 }} /> }
+                    <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+                        Test Results - { userType === 'engineering' ? 'Engineering View' : 'Production View'}
+                    </Typography>
+                    <Chip
+                        label={`${data.length} records`}
+                        color='secondary'
+                        size="small"
+                        sx={{ mr: 2 }} 
+                    />
+                    <IconButton color='inherit' onClick={onBack}>
+                        <ArrowBack />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+        </Box>
     )
 }
 
