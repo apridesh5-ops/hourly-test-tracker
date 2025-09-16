@@ -49,6 +49,7 @@ const DataTable = ({ data, onBack, userType }: DataTableProps) => {
     ]
 
     return (
+        // ToDo: Make Grid UI better
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position='static' elevation={2}>
                 <Toolbar>
@@ -67,6 +68,26 @@ const DataTable = ({ data, onBack, userType }: DataTableProps) => {
                     </IconButton>
                 </Toolbar>
             </AppBar>
+
+            <Box sx={{ p: 3 }}>
+                <Paper elevation={2} sx={{ height: 600 }}>
+                    <DataGrid
+                        columns={columns}
+                        rows={data}
+                        pageSizeOptions={[25, 50, 100]}
+                        slots={{ toolbar: GridToolbar }} // fix: GridToolbar deprecation
+                        sx={{ // fix: backgroundcolor and borderradius not reflecting
+                            '& .MuiDataGrid-root': {
+                                border: 'none'
+                            },
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: '#f5f7fa',
+                                borderRadius: 0
+                            }
+                        }}
+                    />
+                </Paper>
+            </Box>
         </Box>
     )
 }
