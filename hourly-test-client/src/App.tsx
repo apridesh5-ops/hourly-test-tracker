@@ -8,9 +8,9 @@ import ProductionDashboard from './components/production/ProductionDashboard';
 const theme = createTheme({
     palette: {
       primary: {
-        main: '#1976d2',
-        light: '#42a5f5',
-        dark: '#1565c0'
+        main: '#1f1e1c',
+        light: '#787773',
+        dark: '#080707'
       },
       secondary: {
         main: '#dc004e'
