@@ -26,16 +26,16 @@ function parseCSV(filePath: string): Promise<Record<string, string>[]> {
 }
 
 app.post("/fetch-csvs", async (req, res) => {
-    const filePaths: string[] = req.body.filePaths;
+    const paths: string[] = req.body.paths;
 
-    console.log("filePaths", filePaths);
+    console.log("paths", paths);
 
-    if (!isArray(filePaths) || filePaths.length == 0) {
+    if (!isArray(paths) || paths.length == 0) {
         return res.status(400).json({ error: "Please provide atleast one path"});
     }
 
     try {
-        const allCsvPromises = filePaths.map(parseCSV);
+        const allCsvPromises = paths.map(parseCSV);
         const allDataArrays = await Promise.all(allCsvPromises);
         const mergedData = allDataArrays.flat();
 
