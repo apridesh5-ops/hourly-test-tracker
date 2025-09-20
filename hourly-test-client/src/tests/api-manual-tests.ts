@@ -1,5 +1,5 @@
-import type { EngineeringRequest } from '../services/api';
-import { ApiService } from '../services/api'
+import type { EngineeringRequest } from '../services/api.ts';
+import { ApiService } from '../services/api.ts'
 
 const mockEngineeringRequest: EngineeringRequest = {
     paths: {
@@ -43,3 +43,4 @@ export async function runAllApiTests() {
     }
 }
 
+runAllApiTests();
