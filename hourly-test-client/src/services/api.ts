@@ -2,12 +2,7 @@
 const base_url = 'http://localhost:3000';
 
 export interface EngineeringRequest {
-    paths: {
-        machine1: string;
-        machine2: string;
-        machine3: string;
-        machine4: string;
-    };
+    paths: string[];
     date?: string;
     time?: string;
 }
@@ -56,8 +51,11 @@ export class ApiService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.json()
-            return data.results || [];
+            const results = await response.json()
+            console.log(
+                `message: ${results.message} \ntotal-record-count: ${results.rowCount}`
+            )
+            return results.data || [];
         } catch (error) {
             console.error('Engineering API Error: ', error);
             throw new Error('Failed to fetch engineering data');

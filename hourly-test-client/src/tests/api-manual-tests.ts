@@ -2,12 +2,12 @@ import type { EngineeringRequest } from '../services/api.ts';
 import { ApiService } from '../services/api.ts'
 
 const mockEngineeringRequest: EngineeringRequest = {
-    paths: {
-        machine1: "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_1.csv",
-        machine2: "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_2.csv",
-        machine3: "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_3.csv",
-        machine4: "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_4.csv"
-    }
+    paths: [
+        "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_1.csv",
+        // "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_2.csv",
+        // "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_3.csv",
+        // "V:\\Projects-2025\\business\\hourly-test-tracker\\test-and-reference-files\\csv-test-files\\TSP_Production_Data_20250620_4.csv"
+    ]
 }
 
 //Test EngineeringDataFetch 
@@ -17,15 +17,15 @@ async function testEngineeringData() {
 
     try {
         const startTime = Date.now();
-        const result = await ApiService.fetchEngineeringData(mockEngineeringRequest);
+        const data = await ApiService.fetchEngineeringData(mockEngineeringRequest);
         const endTime = Date.now();
 
-        console.log('Response Success!!!!!');
+        console.log('Response Success ✅');
         console.log(`Response Time - ${endTime - startTime}ms`);
-        console.log(`Records Length : ${result.length}`);
-        console.log(`Sample Result: `, result.slice(0, 3));
-
-        return result;
+        console.log(`Records Length : ${data.length}`);
+        console.log(`Sample Result Data: `, data.slice(0, 3));
+        
+        return data;
     } catch (error) {
         console.error('Error fetching csv records: ', error);
         throw error;
