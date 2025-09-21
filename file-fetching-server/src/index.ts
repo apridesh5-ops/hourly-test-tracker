@@ -38,12 +38,15 @@ app.post("/fetch-csvs", async (req, res) => {
         const allCsvPromises = paths.map(parseCSV);
         const allDataArrays = await Promise.all(allCsvPromises);
         const mergedData = allDataArrays.flat();
+        const successMessage = "CSV files merged successfully"
 
         res.status(200).json({
-            message: "CSV files merged successfully",
+            message: successMessage,
             rowCount: mergedData.length,
             data: mergedData
         })
+        console.log(successMessage)
+        console.log("Total records fetched : ", mergedData.length)
     }
     catch (err) {
         console.error("Error processing files: ", err);
