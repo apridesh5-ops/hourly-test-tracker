@@ -84,21 +84,15 @@ const handleLogout = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-        
-        {!user.authenticated && (
-          <LoginPage onLogin={setUser} />
-        )}
-
-        {user.authenticated && user.type === 'engineering' && (
-          <EngineeringDashboard onLogout={handleLogout} />
-        )}
-
-        {user.authenticated && user.type === 'production' && (
-          <ProductionDashboard onLogout={handleLogout} />
-        )}
-
-      </Box>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/login" element={<LoginPage onLogin={handleLogout} />} />
+              <Route path="/engineering" />
+            </Routes>
+          </Router>
+        </LocalizationProvider>
     </ThemeProvider>
   );
 }
