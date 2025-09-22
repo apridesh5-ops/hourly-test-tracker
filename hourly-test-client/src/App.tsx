@@ -8,6 +8,7 @@ import LoginPage from './components/LoginPage';
 import './App.css';
 import EngineeringDashboard from './components/engineering/EngineeringDashboard';
 import ProductionDashboard from './components/production/ProductionDashboard';
+import DataTable from './components/common/DataTable';
 
 const theme = createTheme({
     palette: {
@@ -89,7 +90,9 @@ const handleLogout = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<LoginPage onLogin={handleLogout} />} />
-              <Route path="/engineering" />
+              <Route path="/engineering" element={<EngineeringDashboard onLogout={handleLogout} />} />
+              <Route path="/production" element={<ProductionDashboard onLogout={handleLogout} />} />
+              <Route path="/results" element={<DataTable /> } />
             </Routes>
           </Router>
         </LocalizationProvider>
