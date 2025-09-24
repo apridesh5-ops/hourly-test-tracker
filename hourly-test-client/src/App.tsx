@@ -92,7 +92,7 @@ const handleLogout = () => {
               <Route path="/login" element={<LoginPage onLogin={handleLogout} />} />
               <Route path="/engineering" element={<EngineeringDashboard onLogout={handleLogout} />} />
               <Route path="/production" element={<ProductionDashboard onLogout={handleLogout} />} />
-              <Route path="/results" element={<DataTable /> } />
+              <Route path="/results" element={<DataTable data={[]} onBack={() => {}} userType="engineering" />} />
             </Routes>
           </Router>
         </LocalizationProvider>
