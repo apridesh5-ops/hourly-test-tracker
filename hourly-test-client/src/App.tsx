@@ -78,10 +78,6 @@ const App = () => {
     authenticated: false,
   })
 
-const handleLogout = () => {
-  setUser({ type: null, authenticated: false})
-}
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -89,10 +85,11 @@ const handleLogout = () => {
           <Router>
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<LoginPage onLogin={handleLogout} />} />
-              <Route path="/engineering" element={<EngineeringDashboard onLogout={handleLogout} />} />
-              <Route path="/production" element={<ProductionDashboard onLogout={handleLogout} />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/engineering" element={<EngineeringDashboard />} />
+              <Route path="/production" element={<ProductionDashboard />} />
               <Route path="/results" element={<DataTable data={[]} onBack={() => {}} userType="engineering" />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
           </Router>
         </LocalizationProvider>

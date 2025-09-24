@@ -18,21 +18,15 @@ import { Engineering,
          Visibility,
          VisibilityOff,
          Timeline } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-
-interface LoginType {
-    onLogin: (user: { 
-        type: 'engineering' | 'production';
-        authenticated: boolean
-    }) => void
-} 
-
-const LoginPage = ({ onLogin }: LoginType) => {
+const LoginPage = () => {
     const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleEngineeringLogin = async () => {
         setLoading(true);
@@ -40,7 +34,7 @@ const LoginPage = ({ onLogin }: LoginType) => {
         // simulate authentication
         setTimeout(() => {
             if (password === 'admin123') {
-                onLogin({ type: 'engineering', authenticated: true });
+                navigate("/engineering")
             } else {
                 setError('Invalid password! Please try again.');
             }
@@ -50,7 +44,7 @@ const LoginPage = ({ onLogin }: LoginType) => {
 
     const handleProductionLogin = () => {
         setTimeout(() => {
-            onLogin({ type: 'production', authenticated: true })
+            navigate("/production")
         }, 10);
     };
 

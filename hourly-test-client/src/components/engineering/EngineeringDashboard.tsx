@@ -28,6 +28,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { DataTable } from '../common/DataTable';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface EngineeringFormData {
     paths: {
@@ -40,15 +41,12 @@ interface EngineeringFormData {
     time: Date | null;
 }
 
-interface Logout {
-  onLogout: () => void;
-}
-
-const EngineeringDashboard = ( { onLogout }: Logout ) => {
+const EngineeringDashboard = () => {
     const [error, setError] = useState('');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<EngineeringFormData>({
         paths: {
             machine1: '',
@@ -85,7 +83,7 @@ const EngineeringDashboard = ( { onLogout }: Logout ) => {
                   size='small'
                   sx={{ mr: 2 }}
                 />
-                <IconButton color='inherit' onClick={onLogout}>
+                <IconButton color='inherit' onClick={() => navigate("/login")}>
                   <Logout />
                 </IconButton>
               </Toolbar>

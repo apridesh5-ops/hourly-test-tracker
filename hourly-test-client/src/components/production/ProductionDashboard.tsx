@@ -24,10 +24,7 @@ import {
     FilterList,
 } from '@mui/icons-material';
 import DataTable from '../common/DataTable';
-
-interface Logout {
-    onLogout: () => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 interface TestData {
     id: number;
@@ -39,7 +36,7 @@ interface TestData {
     status: string;
 }
 
-const ProductionDashboard = ({ onLogout }: Logout) => {
+const ProductionDashboard = () => {
     const [searchParams, setSearchParams] = useState({ 
         date: null as Date | null,
         startTime: null as Date | null,
@@ -50,6 +47,7 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
     const [data, setData] = useState<TestData[]>([]);
     const [loading, setLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);
+    const navigate = useNavigate();
 
     const handleSearch = async () => {
         setLoading(true);
@@ -85,7 +83,7 @@ const ProductionDashboard = ({ onLogout }: Logout) => {
                             size='small'
                             sx={{ mr: 2 }}
                         />
-                        <IconButton color='inherit' onClick={onLogout}>
+                        <IconButton color='inherit' onClick={() => navigate("/login")}>
                             <Logout />
                         </IconButton>
                     </Toolbar>
