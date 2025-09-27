@@ -28,7 +28,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { DataTable } from '../common/DataTable';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface EngineeringFormData {
     paths: {
@@ -57,6 +57,20 @@ const EngineeringDashboard = () => {
         date: null,
         time: null
   });
+
+  const handleSubmit = async () => {
+    //validation
+
+    const pathsArray = Object.values(formData.paths);
+    
+    if (!pathsArray.some(path => path.trim())) {
+      setError("Please provide atleast one path");
+      return;
+    }
+    
+    setLoading(true);
+    setError('')
+  }
 
   const handlePathChange = (machine: string, value: string) => {
     setFormData(prev => ({
@@ -181,7 +195,7 @@ const EngineeringDashboard = () => {
                         variant='contained'
                         size='large'
                         fullWidth
-                        onClick={() => {}}
+                        onClick={() => handleSubmit()}
                         disabled={loading}
                         startIcon={<Search />}
                         sx={{ mb: 2 }}
