@@ -28,7 +28,7 @@ function parseCSV(filePath: string): Promise<Record<string, string>[]> {
 app.post("/fetch-csvs", async (req, res) => {
     const paths: string[] = req.body.paths;
 
-    console.log("paths", paths);
+    console.log("Request body params :", req.body);
 
     if (!isArray(paths) || paths.length == 0) {
         return res.status(400).json({ error: "Please provide atleast one path"});
