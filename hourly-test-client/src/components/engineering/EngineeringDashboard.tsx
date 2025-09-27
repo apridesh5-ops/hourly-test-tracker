@@ -29,16 +29,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { DataTable } from '../common/DataTable';
 import { useNavigate } from 'react-router-dom';
+import { ApiService } from '../../services/api';
 
-interface EngineeringFormData {
-    paths: {
-        machine1: string;
-        machine2: string;
-        machine3: string;
-        machine4: string;
-    };
-    date: Date | null;
-    time: Date | null;
+interface EngineeringRequestPayload {
+  paths: string[],
+  date?: Date | null,
+  time?: Date | null
 }
 
 const EngineeringDashboard = () => {
@@ -47,22 +43,22 @@ const EngineeringDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const navigate = useNavigate();
-    const [formData, setFormData] = useState<EngineeringFormData>({
+    const [formData, setFormData] = useState({
         paths: {
-            machine1: '',
-            machine2: '',
-            machine3: '',
-            machine4: ''
+            machine1: '' as string,
+            machine2: '' as string,
+            machine3: '' as string,
+            machine4: '' as string
         },
-        date: null,
-        time: null
+        date: null as Date | null,
+        time: null as Date | null
   });
 
   const handleSubmit = async () => {
     //validation
 
     const pathsArray = Object.values(formData.paths);
-    
+
     if (!pathsArray.some(path => path.trim())) {
       setError("Please provide atleast one path");
       return;
@@ -70,7 +66,30 @@ const EngineeringDashboard = () => {
     
     setLoading(true);
     setError('')
-  }
+
+    try {
+      const requestPayload: EngineeringRequestPayload = {
+        paths: pathsArray,
+        date: formData.date,
+        time: formData.time
+      };
+      
+      const rowData = await ApiService.fetchEngineeringData(requestPayload);
+
+      navigate("/results", {
+        state: {
+          data: rowData,
+          userType: 'engineering',
+          searchParams: requestPayload
+        }
+        
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handlePathChange = (machine: string, value: string) => {
     setFormData(prev => ({

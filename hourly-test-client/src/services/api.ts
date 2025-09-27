@@ -3,8 +3,8 @@ const base_url = 'http://localhost:3000';
 
 export interface EngineeringRequest {
     paths: string[];
-    date?: string;
-    time?: string;
+    date?: Date | null;
+    time?: Date | null;
 }
 
 interface ProductionRequest {
