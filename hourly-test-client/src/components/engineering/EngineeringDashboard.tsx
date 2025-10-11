@@ -59,7 +59,9 @@ const EngineeringDashboard = () => {
 
     const pathsArray = Object.values(formData.paths);
 
-    if (!pathsArray.some(path => path.trim())) {
+    const validPathsArray = pathsArray.filter(path => !!path);
+
+    if (validPathsArray.length === 0) {
       setError("Please provide atleast one path");
       return;
     }
@@ -69,7 +71,7 @@ const EngineeringDashboard = () => {
 
     try {
       const requestPayload: EngineeringRequestPayload = {
-        paths: pathsArray,
+        paths: validPathsArray,
         date: formData.date,
         time: formData.time
       };
