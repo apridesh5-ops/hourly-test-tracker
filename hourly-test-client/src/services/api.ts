@@ -51,10 +51,10 @@ export class ApiService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const results = await response.json()
+            const results = await response.json();
             console.log(
                 `message: ${results.message} \ntotal-record-count: ${results.rowCount}`
-            )
+            );
             return results.data || [];
         } catch (error) {
             console.error('Engineering API Error: ', error);
