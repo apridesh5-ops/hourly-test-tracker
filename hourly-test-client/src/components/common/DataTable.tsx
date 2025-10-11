@@ -29,6 +29,10 @@ const DataTable = () => {
         navigate("/" + userType)
     }
 
+    const getRowId = (row: any) => {
+        return `${row.TesterID}_${row.Date}_${row.Tester_Start_Time}`.replace(/[^a-zA-Z0-9]/g, '_');
+    };
+
     const columns: GridColDef[] = [
         { 
             field: 'TesterID',
@@ -83,6 +87,7 @@ const DataTable = () => {
                     <DataGrid
                         columns={columns}
                         rows={data}
+                        getRowId={getRowId}
                         pageSizeOptions={[25, 50, 100]}
                         slots={{ toolbar: GridToolbar }} // fix: GridToolbar deprecation
                         sx={{ // fix: backgroundcolor and borderradius not reflecting
