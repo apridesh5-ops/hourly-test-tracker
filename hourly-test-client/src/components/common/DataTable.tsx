@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
     Box,
     Paper,
@@ -19,31 +20,39 @@ interface DataTableProps {
     userType: 'engineering' | 'production';
 }
 
-const DataTable = ({ data, onBack, userType }: DataTableProps) => {
+const DataTable = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { data, userType, searchParams } = location.state || {}
+    
+    const onBack = () => {
+        navigate("/" + userType)
+    }
+
     const columns: GridColDef[] = [
         { 
-            field: 'id',
-            headerName: 'ID',
+            field: 'TesterID',
+            headerName: 'Tester ID',
             width: 90
         },
         {
-            field: 'date',
+            field: 'Date',
             headerName: 'Date',
             width: 120
         },
         {
-            field: 'startTime',
+            field: 'Tester_Start_Time',
             headerName: 'Start Time',
             width: 120
         },
         {
-            field: 'endTime',
+            field: 'Tester_End_Time',
             headerName: 'End Time',
             width: 120
         },
         {
-            field: 'testId',
-            headerName: 'Test ID',
+            field: 'Tester_Result',
+            headerName: 'Tester Result',
             width: 150
         }
     ]

@@ -88,7 +88,7 @@ const App = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/engineering" element={<EngineeringDashboard />} />
               <Route path="/production" element={<ProductionDashboard />} />
-              <Route path="/results" element={<DataTable data={[]} onBack={() => {}} userType="engineering" />} />
+              <Route path="/results" element={<DataTable />} />
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
           </Router>
