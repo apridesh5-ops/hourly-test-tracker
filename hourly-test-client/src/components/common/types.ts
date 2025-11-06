@@ -17,3 +17,29 @@ export interface CSVRow {
     Tester_End_Time?: string;
     Record_Time?: string;
 }
+
+export interface EngineeringFormData {
+  paths: {
+    machine1: string;
+    machine2: string;
+    machine3: string;
+    machine4: string;
+  };
+  date: string;
+  time: string;
+}
+
+export interface AppState {
+    // Data State
+    csvData: CSVRow[];
+    engineeringInputs: EngineeringFormData;
+    lastFetchTimestamp: string | null;
+}
+
+export interface AppContextType extends AppState {
+    // Data Actions
+    setCSVData: (data: CSVRow[]) => void;
+    setEngineeringInputs: (inputs: EngineeringFormData) => void;
+    clearData: () => void;
+}
+
