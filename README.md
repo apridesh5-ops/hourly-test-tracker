@@ -34,6 +34,19 @@ Needs password authentication
 - Once the data has been fetched from the backend with the preffered date and time, it should be available through out the session until the user refreshes the page or he again fetches the data from engineering login. eventhough we logout and and login again to the production login, the data shouldn't be vanished, it should be same as we left before.
 -  In engineering login after we enter the path and apply the fetch/submit button, we'll be redirected to the production page. suppose if we want to view the applied paths, the paths won't be there after we try to view them by engineering login. so another requirement is the applied paths should be available in the input fields through out the session util refresh
 
+## Fields to Display
+
+1. **Input** - Total units tested in a particular hour
+2. **Pass/Output** - Total units passed
+3. **Yield %** - Output / Input * 100
+4. **Retest %** - Retest Unites / Total Input Units * 100
+5. **Fail %** - Fail Units / Total Units Tested * 100
+6. **Top Fail Symptoms** - Most common reasons for failure
+7. **Top Fail Tester IDs** - Which testers failed most
+8. **Top Fail Carrier SNs** - Carrier numbers that failed most
+9. **Total Row** - Shows totals for whole shift/day
+
+
 
 ### Table (Date Grid)
 Visualize rows in table with filter options
