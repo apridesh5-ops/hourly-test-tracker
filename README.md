@@ -24,5 +24,22 @@ Needs password authentication
 5. Shit (A / B / C)
 6. Search Button
 
-#### Table (Date Grid)
-visualize rows in table with filter options
+# Requirements
+
+## Logins
+- Engineering login is only ment for providing the file paths and setting the preffered date and time filters and apply fetch/search. It should be authenticated by password.
+- Production login is meant for viewing and interacting with the user requested data by applying required filters and visualizing. When the user enters the fetch/search button from engineering login they'll be redirected to the production view page.
+  
+## To maintain the state
+- Once the data has been fetched from the backend with the preffered date and time, it should be available through out the session until the user refreshes the page or he again fetches the data from engineering login. eventhough we logout and and login again to the production login, the data shouldn't be vanished, it should be same as we left before.
+-  In engineering login after we enter the path and apply the fetch/submit button, we'll be redirected to the production page. suppose if we want to view the applied paths, the paths won't be there after we try to view them by engineering login. so another requirement is the applied paths should be available in the input fields through out the session util refresh
+
+
+### Table (Date Grid)
+Visualize rows in table with filter options
+
+#### Columns to display on table
+
+| Column Name | Description                                                                          |  
+| :---------- | :------------------------------------------------------------------------------------|
+| Time        | ****
