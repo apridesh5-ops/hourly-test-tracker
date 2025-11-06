@@ -11,7 +11,7 @@ import {
     Chip, 
 } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import type { GridColDef } from '@mui/x-data-grid';
+import { getGridDateOperators, type GridColDef } from '@mui/x-data-grid';
 import { ArrowBack, Download, Engineering, Group } from '@mui/icons-material';
 
 interface DataTableProps {
@@ -37,27 +37,28 @@ const DataTable = () => {
         { 
             field: 'TesterID',
             headerName: 'Tester ID',
-            width: 90
+            width: 120
         },
         {
             field: 'Date',
             headerName: 'Date',
-            width: 120
-        },
-        {
-            field: 'Tester_Start_Time',
-            headerName: 'Start Time',
-            width: 120
+            width: 120,
+            filterOperators: getGridDateOperators()
         },
         {
             field: 'Tester_End_Time',
             headerName: 'End Time',
-            width: 120
+            width: 180
         },
         {
             field: 'Tester_Result',
             headerName: 'Tester Result',
             width: 150
+        },
+        {
+            field: 'Error_Content',
+            headerName: 'Error Content',
+            width: 250
         }
     ]
 
