@@ -1,14 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { createTheme, ThemeProvider, CssBaseline, Box } from '@mui/material';
-import { useState } from 'react';
 import LoginPage from './components/LoginPage';
 import './App.css';
 import EngineeringDashboard from './components/engineering/EngineeringDashboard';
 import ProductionDashboard from './components/production/ProductionDashboard';
-import DataTable from './components/common/DataTable';
+import { AppProvider, useAppContext } from './context/AppContext';
 
 const theme = createTheme({
     palette: {
@@ -66,32 +63,33 @@ const theme = createTheme({
     ],
   })
 
-  interface User {
-    type: 'engineering' | 'production' | null;
-    authenticated: boolean
-  }
+interface User {
+  type: 'engineering' | 'production' | null;
+  authenticated: boolean
+}
 
+// ToDo - remove router dependencies and tailwind dependencies
+
+const AppContext = () => {
+  const { currentView } = useAppContext();
+
+  return (
+    <Box>
+      { currentView === 'login' && <LoginPage /> }
+      { currentView === 'engineering' && <EngineeringDashboard /> }
+      { currentView === 'production' && <ProductionDashboard /> }
+    </Box>
+  )
+}
 
 const App = () => {
-  const [user, setUser] = useState<User>({
-    type: null,
-    authenticated: false,
-  })
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/engineering" element={<EngineeringDashboard />} />
-              <Route path="/production" element={<ProductionDashboard />} />
-              <Route path="/results" element={<DataTable />} />
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-          </Router>
+          <AppProvider>
+            <AppContext />
+          </AppProvider>
         </LocalizationProvider>
     </ThemeProvider>
   );

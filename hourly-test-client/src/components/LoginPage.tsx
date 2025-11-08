@@ -18,37 +18,34 @@ import { Engineering,
          Visibility,
          VisibilityOff,
          Timeline } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 
 const LoginPage = () => {
-    const [loginType, setLoginType] = useState<'engineering' | 'production' | null>(null);
+    const { loginEngineering, navigateToProduction } = useAppContext();
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const [showEngineerigLogin, setShowEngineeringLogin] = useState(false);
 
-    const handleEngineeringLogin = async () => {
-        setLoading(true);
+    const handleEngineeringLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
 
-        // simulate authentication
-        setTimeout(() => {
-            if (password === 'admin123') {
-                navigate("/engineering")
-            } else {
-                setError('Invalid password! Please try again.');
-            }
-            setLoading(false);
-        }, 500);
+        const success = loginEngineering(password);
+        if (!success) {
+            setError('Invalid password. Please try again');
+            setPassword('');
+        }
     };
 
     const handleProductionLogin = () => {
         setTimeout(() => {
-            navigate("/production")
+            navigateToProduction();
         }, 10);
     };
 
-    if (loginType === 'engineering') {
+    if (showEngineerigLogin) {
         return (
             <Container maxWidth='sm'>
                 <Box
@@ -87,9 +84,7 @@ const LoginPage = () => {
 
                         <Box
                             component="form"
-                            onSubmit={(e) => { e.preventDefault();
-                                               handleEngineeringLogin();
-                            }}>
+                            onSubmit={handleEngineeringLogin}>
                             <TextField 
                                 fullWidth
                                 type={showPassword ? 'text' : 'password'}
@@ -131,7 +126,7 @@ const LoginPage = () => {
                                 <Button
                                     variant='outlined'
                                     fullWidth
-                                    onClick={() => setLoginType(null)}
+                                    onClick={() => setShowEngineeringLogin(false)}
                                     size='large'
                                 >
                                     Back
@@ -202,7 +197,7 @@ const LoginPage = () => {
                                         boxShadow: 3
                                     }
                                 }}
-                                onClick={() => setLoginType('engineering')}
+                                onClick={() => setShowEngineeringLogin(true)}
                             >
                                 <Avatar sx={{ mx: 'auto', mb: 2, bgcolor: 'primary.main', width: 64, height: 64}}>
                                     <Engineering fontSize='large' />
@@ -237,7 +232,6 @@ const LoginPage = () => {
                                     }
                                 }}
                                 onClick={() => {
-                                    setLoginType('production');
                                     handleProductionLogin();
                                 }}
                             >
