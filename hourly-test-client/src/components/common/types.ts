@@ -34,6 +34,10 @@ export interface AppState {
     csvData: CSVRow[];
     engineeringInputs: EngineeringFormData;
     lastFetchTimestamp: string | null;
+
+    // Auth State
+    isEngineeringAuthenticated: boolean;
+    currentView: 'login' | 'engineering' | 'production';
 }
 
 export interface AppContextType extends AppState {
@@ -41,5 +45,11 @@ export interface AppContextType extends AppState {
     setCSVData: (data: CSVRow[]) => void;
     setEngineeringInputs: (inputs: EngineeringFormData) => void;
     clearData: () => void;
-}
 
+    // Auth actions
+    loginEngineering: (password: string) => boolean;
+    logoutEngineering: () => void;
+    navigateToProduction: () => void;
+    navigateToEngineering: () => void;
+    navigateToLogin: () => void;
+}
