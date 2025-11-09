@@ -40,10 +40,16 @@ export interface AppState {
     currentView: 'login' | 'engineering' | 'production';
 }
 
+export interface EngineeringRequestPayload {
+  paths: string[],
+  date?: string | null,
+  time?: string | null
+}
+
 export interface AppContextType extends AppState {
     // Data Actions
     setCSVData: (data: CSVRow[]) => void;
-    setEngineeringInputs: (inputs: EngineeringFormData) => void;
+    setEngineeringInputs: (inputs: EngineeringRequestPayload) => void;
     clearData: () => void;
 
     // Auth actions

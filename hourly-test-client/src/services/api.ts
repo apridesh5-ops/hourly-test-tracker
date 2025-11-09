@@ -4,8 +4,8 @@ const base_url = 'http://localhost:3000';
 
 export interface EngineeringRequest {
     paths: string[];
-    date?: Date | null;
-    time?: Date | null;
+    date?: string | null;
+    time?: string | null;
 }
 
 interface ProductionRequest {

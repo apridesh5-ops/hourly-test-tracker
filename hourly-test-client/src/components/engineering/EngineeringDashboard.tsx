@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Container,
@@ -28,13 +28,13 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { DataTable } from '../common/DataTable';
-import { useNavigate } from 'react-router-dom';
 import { ApiService } from '../../services/api';
+import { useAppContext } from '../../context/AppContext';
 
 interface EngineeringRequestPayload {
   paths: string[],
-  date?: Date | null,
-  time?: Date | null
+  date?: string | null,
+  time?: string | null
 }
 
 const EngineeringDashboard = () => {
@@ -42,17 +42,32 @@ const EngineeringDashboard = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);
-    const navigate = useNavigate();
+    const {
+      engineeringInputs,
+      setEngineeringInputs,
+      setCSVData,
+      navigateToProduction,
+      navigateToLogin,
+      lastFetchTimestamp
+    } = useAppContext();
+
     const [formData, setFormData] = useState({
-        paths: {
-            machine1: '' as string,
-            machine2: '' as string,
-            machine3: '' as string,
-            machine4: '' as string
-        },
-        date: null as Date | null,
-        time: null as Date | null
-  });
+        paths: engineeringInputs.paths,
+        date: engineeringInputs.date ? new Date(engineeringInputs.date) : null,
+        time: engineeringInputs.time ? new Date(`2000-01-01T${engineeringInputs.time}`) : null
+    });
+
+    // update local form when context changes
+
+  useEffect(() => {
+    setFormData({
+      paths: engineeringInputs.paths,
+      date: engineeringInputs.date ? new Date(engineeringInputs.date) : null,
+      time: engineeringInputs.time ? new Date(`2000-01-01T${engineeringInputs.time}`) : null
+    })
+  }, [engineeringInputs]);
+
+    
 
   const handleSubmit = async () => {
     //validation
@@ -72,19 +87,20 @@ const EngineeringDashboard = () => {
     try {
       const requestPayload: EngineeringRequestPayload = {
         paths: validPathsArray,
-        date: formData.date,
-        time: formData.time
+        date: "",
+        time: ""
       };
+
+      // save inputs to context 
+      setEngineeringInputs(requestPayload)
       
       const rowData = await ApiService.fetchEngineeringData(requestPayload);
 
-      navigate("/results", {
-        state: {
-          data: rowData,
-          userType: 'engineering',
-          searchParams: requestPayload
-        }
-      });
+      // save fetched data to context
+      setCSVData(rowData);
+
+      // navigate to production view
+      navigateToProduction();
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -93,7 +109,7 @@ const EngineeringDashboard = () => {
     }
   };
 
-  const handlePathChange = (machine: string, value: string) => {
+  const handlePathChange = (machine: keyof typeof formData.paths, value: string) => {
     setFormData(prev => ({
       ...prev,
       paths: {
@@ -118,7 +134,7 @@ const EngineeringDashboard = () => {
                   size='small'
                   sx={{ mr: 2 }}
                 />
-                <IconButton color='inherit' onClick={() => navigate("/login")}>
+                <IconButton color='inherit' onClick={navigateToLogin}>
                   <Logout />
                 </IconButton>
               </Toolbar>
@@ -152,7 +168,7 @@ const EngineeringDashboard = () => {
                             fullWidth 
                             label={`Machine ${index + 1} Path`}
                             value={path}
-                            onChange={(e) => handlePathChange(machine, e.target.value)}
+                            onChange={(e) => handlePathChange(machine as keyof typeof formData.paths, e.target.value)}
                             placeholder='\\server\path\file.csv'
                             slotProps={{
                               input: {
