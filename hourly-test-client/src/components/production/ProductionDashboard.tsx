@@ -1,185 +1,177 @@
-import { useState } from 'react';
-import {
+import React, { useState } from 'react';
+import { 
     Box,
-    Container,
-    Typography,
     Paper,
-    Grid,
-    TextField,
+    Typography,
     Button,
     AppBar,
     Toolbar,
     IconButton,
     Chip,
-    MenuItem,
+    Container, 
     Alert,
-} from '@mui/material';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import {
-    Logout, 
-    Group, 
-    Search,
-    FilterList,
-} from '@mui/icons-material';
-import DataTable from '../common/DataTable';
-import { useNavigate } from 'react-router-dom';
+    Card
+} from "@mui/material";
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { getGridDateOperators, type GridColDef } from '@mui/x-data-grid';
+import { ArrowBack, Download, Refresh, Group } from '@mui/icons-material';
+import { useAppContext } from '../../context/AppContext';
 
-interface TestData {
-    id: number;
-    date: string;
-    startTime: string;
-    endTime: string;
-    testId: string;
-    shift: string;
-    status: string;
-}
 
 const ProductionDashboard = () => {
-    const [searchParams, setSearchParams] = useState({ 
-        date: null as Date | null,
-        startTime: null as Date | null,
-        endTime: null as Date | null,
-        testId: '',
-        shift: '' 
-    });
-    const [data, setData] = useState<TestData[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [showResults, setShowResults] = useState(false);
-    const navigate = useNavigate();
+    const {
+        csvData,
+        lastFetchTimestamp,
+        navigateToLogin,
+        navigateToEngineering,
+        isEngineeringAuthenticated,
+        clearData
+    } = useAppContext();
 
-    const handleSearch = async () => {
-        setLoading(true);
+    const [filteredData, setFilteredData] = useState(csvData);
 
-        //simulate API call
-        setTimeout(() => {
-            setData([
-                { id: 1, date: '2025-08-24', startTime: '09:00', endTime: '10:00', testId: 'T001', shift: 'A', status: 'Pass' },
-                { id: 2, date: '2025-08-24', startTime: '10:30', endTime: '11:30', testId: 'T002', shift: 'B', status: 'Fail' },
-                // Add more mock data
-            ]);
-            setShowResults(true);
-            setLoading(false);
-        }, 1000)
-    }
+    const getRowId = (row: any) => {
+        return `${row.TesterID}_${row.Date}_${row.Tester_Start_Time}`.replace(/[^a-zA-Z0-9]/g, '_');
+    };
 
-    if (showResults) {
-        return <DataTable data={data} onBack={() => setShowResults(false)} userType="production" />;
-    }
+    const columns: GridColDef[] = [
+        { 
+            field: 'TesterID',
+            headerName: 'Tester ID',
+            width: 120
+        },
+        {
+            field: 'Date',
+            headerName: 'Date',
+            width: 120,
+            filterOperators: getGridDateOperators()
+        },
+        {
+            field: 'Tester_End_Time',
+            headerName: 'End Time',
+            width: 180
+        },
+        {
+            field: 'Tester_Result',
+            headerName: 'Tester Result',
+            width: 150
+        },
+        {
+            field: 'Error_Content',
+            headerName: 'Error Content',
+            width: 250
+        }
+    ]
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position='static' elevation={2}>
-                    <Toolbar>
-                        <Group sx={{ mr: 2 }} />
-                        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                            Production Dashboard
-                        </Typography>
-                        <Chip
-                            label='Public Access'
-                            color='secondary'
-                            size='small'
-                            sx={{ mr: 2 }}
-                        />
-                        <IconButton color='inherit' onClick={() => navigate("/login")}>
-                            <Logout />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-
-                <Container maxWidth="lg" sx={{ py: 4 }}>
-                    <Typography variant='h4' gutterBottom sx={{ mb: 4 }}>
-                        Test Data Search
+        // ToDo: Make Grid UI better
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position='static' elevation={2}>
+                <Toolbar>
+                    <Group sx={{ mr: 2 }} />
+                    <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+                        Production Dashboard
                     </Typography>
 
-                    <Paper elevation={2} sx={{ p: 4 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                            <FilterList sx={{ mr: 2, color: 'primary.main'}}/>
-                            <Typography variant='h6'>
-                                Search Parameters
-                            </Typography>
-                        </Box>
+                    {lastFetchTimestamp && (
+                        <Chip
+                            label={`Last fetch: ${new Date(lastFetchTimestamp).toLocaleString()}`}
+                            size='small'
+                            color="info"
+                            sx={{ mr: 2 }} 
+                        />
+                    )}
 
-                        <Grid container spacing={3}>
-                            
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <DatePicker
-                                    label="Date"
-                                    value={searchParams.date}
-                                    onChange={
-                                        (newValue) => {setSearchParams(prev => ({ ...prev, date: newValue }))}
-                                    }
-                                    //renderInput not working
-                                />
-                            </Grid>
+                    <Chip
+                        label={`${csvData.length} records`}
+                        size="small"
+                        color="secondary"
+                        sx={{ mr: 2 }}
+                    />
 
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <TimePicker
-                                    label="Start Time"
-                                    value={searchParams.startTime}
-                                    onChange={
-                                        (newValue) => {setSearchParams(prev => ({...prev, startTime: newValue }))}
-                                    }
-                                    //renderInput not working
-                                />
-                            </Grid>
+                    {isEngineeringAuthenticated && (
+                        <Button
+                            color='inherit'
+                            startIcon={<Refresh />}
+                            onClick={navigateToEngineering}
+                            sx={{ mr: 2 }}
+                        >
+                            Re-fetch
+                        </Button>
+                    )}
 
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <TimePicker
-                                    label="End Time"
-                                    value={searchParams.endTime}
-                                    onChange={
-                                        (newValue) => {setSearchParams(prev => ({...prev, endTime: newValue }))}
-                                    }
-                                    //renderInput not working
-                                />
-                            </Grid>
+                    <IconButton color='inherit' onClick={navigateToLogin}>
+                        <ArrowBack />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
 
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <TextField
-                                    fullWidth
-                                    label="Test ID"
-                                    value={searchParams.testId}
-                                    onChange={(e) => setSearchParams( prev => ({ ...prev, testId: e.target.value }))} 
-                                    placeholder='Enter test ID'
-                                />
-                            </Grid>
-                            
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Shift"
-                                    value={searchParams.shift}
-                                    onChange={(e) => setSearchParams( prev => ({ ...prev, shift: e.target.value }))}
-                                >
-                                    <MenuItem value="">All Shifts</MenuItem>
-                                    <MenuItem value="A">Shift A</MenuItem>
-                                    <MenuItem value="B">Shift B</MenuItem>
-                                    <MenuItem value="C">Shift C</MenuItem>
-                                </TextField>
-                            </Grid>
-
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                <Button
-                                    variant='contained'
-                                    size='large'
-                                    fullWidth
-                                    onClick={handleSearch}
-                                    disabled={loading}
-                                    startIcon={<Search />}
-                                    sx={{ height: '56px' }}
-                                >
-                                    {loading ? 'Searching...' : 'Search'}
+            <Container maxWidth="xl" sx={{ py: 3 }}>
+                    {csvData.length === 0 ? (
+                        <Alert severity='info'>
+                            No data available. Please fetch data from Engineering Dashboard.
+                            {isEngineeringAuthenticated && 
+                                (<Button onClick={navigateToEngineering} sx={{ ml: 2 }}>
+                                    Enter to Engineering Dashboard
                                 </Button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Container>
-            </Box>
-        </LocalizationProvider>
+                            )}
+                        </Alert>
+                    ) : (
+                        <>
+                            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between'}}>
+                                <Typography variant='h6'>
+                                    Test Results
+                                </Typography>
+                                <Button startIcon={<Download />} onClick={() => {}}>
+                                    Export CSV
+                                </Button>
+                            </Box>
+
+                            <Card>
+                                <Box sx={{ height: 600, width: '100%' }}>
+                                    <DataGrid
+                        columns={columns}
+                        rows={filteredData}
+                        getRowId={getRowId}
+                        pageSizeOptions={[25, 50, 100]}
+                        slots={{ toolbar: GridToolbar }} // fix: GridToolbar deprecation
+                        sx={{ // fix: backgroundcolor and borderradius not reflecting
+                            '& .MuiDataGrid-root': {
+                                border: 'none'
+                            },
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: '#f5f7fa',
+                                borderRadius: 0
+                            }
+                        }}
+                    />
+                                </Box>
+                            </Card>
+                        </>
+                    )}
+            </Container>
+
+            {/* <Box sx={{ p: 3 }}>
+                <Paper elevation={2} sx={{ height: 600 }}>
+                    <DataGrid
+                        columns={columns}
+                        rows={data}
+                        getRowId={getRowId}
+                        pageSizeOptions={[25, 50, 100]}
+                        slots={{ toolbar: GridToolbar }} // fix: GridToolbar deprecation
+                        sx={{ // fix: backgroundcolor and borderradius not reflecting
+                            '& .MuiDataGrid-root': {
+                                border: 'none'
+                            },
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: '#f5f7fa',
+                                borderRadius: 0
+                            }
+                        }}
+                    />
+                </Paper>
+            </Box> */}
+        </Box>
     )
 }
 
