@@ -92,7 +92,7 @@ const EngineeringDashboard = () => {
       };
 
       // save inputs to context 
-      setEngineeringInputs(requestPayload)
+      setEngineeringInputs(formData)
       
       const rowData = await ApiService.fetchEngineeringData(requestPayload);
 

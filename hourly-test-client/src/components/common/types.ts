@@ -25,8 +25,8 @@ export interface EngineeringFormData {
     machine3: string;
     machine4: string;
   };
-  date: string;
-  time: string;
+  date: Date | null;
+  time: Date | null;
 }
 
 export interface AppState {
@@ -49,7 +49,7 @@ export interface EngineeringRequestPayload {
 export interface AppContextType extends AppState {
     // Data Actions
     setCSVData: (data: CSVRow[]) => void;
-    setEngineeringInputs: (inputs: EngineeringRequestPayload) => void;
+    setEngineeringInputs: (inputs: EngineeringFormData) => void;
     clearData: () => void;
 
     // Auth actions

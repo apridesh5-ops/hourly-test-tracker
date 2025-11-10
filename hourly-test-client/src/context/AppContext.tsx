@@ -10,8 +10,8 @@ const initialEngineeringInputs: EngineeringFormData = {
         machine3: '',
         machine4: '',
     },
-    date: '',
-    time: ''
+    date: null,
+    time: null
 };
 
 const initialState: AppState = {
