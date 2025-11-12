@@ -52,9 +52,14 @@ const EngineeringDashboard = () => {
     } = useAppContext();
 
     const [formData, setFormData] = useState({
-        paths: engineeringInputs.paths,
-        date: engineeringInputs.date ? new Date(engineeringInputs.date) : null,
-        time: engineeringInputs.time ? new Date(`2000-01-01T${engineeringInputs.time}`) : null
+        paths: {
+          machine1: '' as string,
+          machine2: '' as string,
+          machine3: '' as string,
+          machine4: '' as string
+        },
+        date: null as Date | null,
+        time: null as Date | null
     });
 
     // update local form when context changes
@@ -66,6 +71,8 @@ const EngineeringDashboard = () => {
       time: engineeringInputs.time ? new Date(`2000-01-01T${engineeringInputs.time}`) : null
     })
   }, [engineeringInputs]);
+
+  console.log(formData.paths);
 
     
 
@@ -162,6 +169,45 @@ const EngineeringDashboard = () => {
                     </Typography>
 
                     <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          label="Machine 1 Path"
+                          value={formData.paths.machine1}
+                          onChange={(e) => handlePathChange('machine1', e.target.value)}
+                          placeholder="\\server\path\machine1.csv"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          label="Machine 2 Path"
+                          value={formData.paths.machine2}
+                          onChange={(e) => handlePathChange('machine2', e.target.value)}
+                          placeholder="\\server\path\machine2.csv"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          label="Machine 3 Path"
+                          value={formData.paths.machine3}
+                          onChange={(e) => handlePathChange('machine3', e.target.value)}
+                          placeholder="\\server\path\machine3.csv"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          label="Machine 4 Path"
+                          value={formData.paths.machine4}
+                          onChange={(e) => handlePathChange('machine4', e.target.value)}
+                          placeholder="\\server\path\machine4.csv"
+                        />
+                      </Grid>
+                    </Grid>
+
+                    {/* <Grid container spacing={2}>
                       {Object.entries(formData.paths).map(([machine, path], index) => (
                         <Grid size={{ xs: 12, sm: 6 }} key={machine}>
                           <TextField 
@@ -179,7 +225,7 @@ const EngineeringDashboard = () => {
                           />
                         </Grid>
                       ))}
-                    </Grid>
+                    </Grid> */}
                   </Paper>
 
                   <Paper elevation={2} sx={{ p: 4 }}>
