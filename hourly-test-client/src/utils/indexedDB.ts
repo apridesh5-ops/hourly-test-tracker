@@ -40,4 +40,55 @@ class IndexedDBManager {
             request.onsuccess = () => resolve();
         });
     }
+
+    async getData(key: string): Promise<any> {
+        if (!this.db) await this.initDB();
+
+        return new Promise((resolve, reject) => {
+            const transaction = this.db!.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.get(key);
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+        });
+    }
+
+    async deleteData(key: string): Promise<void> {
+        if (!this.db) await this.initDB();
+
+        return new Promise((resolve, reject) => {
+            const transaction = this.db!.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.delete(key);
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve();
+        });
+    }
+
+    async clearAll(): Promise<void> {
+        if (!this.db) await this.initDB();
+
+        return new Promise((resolve, reject) => {
+            const transaction = this.db!.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.clear();
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve();
+        });
+    }
+
+    async getStorageSize(): Promise<number> {
+        if (!this.db) await this.initDB();
+
+        const data = await this.getData('csv_data');
+        if (!data) return 0;
+
+        // estimate size in bytes
+        return new Blob([JSON.stringify(data)]).size;
+    }
 }
+
+export const dbManager = new IndexedDBManager();
