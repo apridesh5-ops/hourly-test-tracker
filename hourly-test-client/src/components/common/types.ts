@@ -37,7 +37,6 @@ export interface AppState {
 
     // Auth State
     isEngineeringAuthenticated: boolean;
-    currentView: 'login' | 'engineering' | 'production';
 }
 
 export interface EngineeringRequestPayload {
@@ -58,4 +57,5 @@ export interface AppContextType extends AppState {
     navigateToProduction: () => void;
     navigateToEngineering: () => void;
     navigateToLogin: () => void;
+    getStorageInfo: () => Promise<{ size: number; recordCount: number }>;
 }

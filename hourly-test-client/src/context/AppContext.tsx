@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { type CSVRow, type AppContextType, type EngineeringFormData, type AppState } from '../components/common/types';
+import { dbManager } from '../utils/indexedDB';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -14,17 +15,8 @@ const initialEngineeringInputs: EngineeringFormData = {
     time: null
 };
 
-const initialState: AppState = {
-    csvData: [],
-    engineeringInputs: initialEngineeringInputs,
-    lastFetchTimestamp: null,
-    isEngineeringAuthenticated: false,
-    currentView: 'login'
-};
-
 // Local Storage Keys
 const STORAGE_KEYS = {
-    CSV_DATA: 'hourly_tracker_csv_data',
     ENGINEERING_INPUTS: 'hourly_tracker_engineering_inputs',
     LAST_FETCH: 'hourly_tracker_last_fetch',
     AUTH_STATE: 'hourly_tracker_auth_state',
@@ -32,41 +24,32 @@ const STORAGE_KEYS = {
 };
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-    const [state, setState] = useState<AppState>(() => {
-        try {
-            const savedCSVData = localStorage.getItem(STORAGE_KEYS.CSV_DATA);
-            const savedInputs = localStorage.getItem(STORAGE_KEYS.ENGINEERING_INPUTS);
-            const savedTimestamp = localStorage.getItem(STORAGE_KEYS.LAST_FETCH);
-            const savedAuthState = localStorage.getItem(STORAGE_KEYS.AUTH_STATE);
-            const savedView = localStorage.getItem(STORAGE_KEYS.CURRENT_VIEW);
-
-            return {
-                csvData: savedCSVData ? JSON.parse(savedCSVData) : [],
-                engineeringInputs: savedInputs ? JSON.parse(savedInputs) : initialEngineeringInputs,
-                lastFetchTimestamp: savedTimestamp,
-                isEngineeringAuthenticated: savedAuthState === 'true',
-                currentView: (savedView as AppState['currentView']) || 'login'
-            };
-        } catch (error) {
-            console.error("Error loading state from localStorage: ", error);
-            return initialState;
-        }
+    const [state, setState] = useState<AppState>({
+        csvData: [],
+        engineeringInputs: initialEngineeringInputs,
+        lastFetchTimestamp: null,
+        isEngineeringAuthenticated: false,
     });
 
-    // Persist state to local storage whenever it changes   
+    const [currentView, setCurrentView] = useState<'login' | 'engineering' | 'production'>('login');
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Initialize: Load data from IndexedDB and localStorage   
     useEffect(() => {
-        try {
-            localStorage.setItem(STORAGE_KEYS.CSV_DATA, JSON.stringify(state.csvData));
-            localStorage.setItem(STORAGE_KEYS.ENGINEERING_INPUTS, JSON.stringify(state.engineeringInputs));
-            if(state.lastFetchTimestamp) {
-                localStorage.setItem(STORAGE_KEYS.LAST_FETCH, state.lastFetchTimestamp);
+        const LoadInitialState = async () => {
+            try {
+                //Initialize IndexedDB
+                await dbManager.initDB();
+
+                //Load CSV data from IndexedDB
+                const savedCSVData = await dbManager.getData('csv_data');
+
+                //Load other data from localStorage (small data) -
+                const savedInputs = localStorage.getItem(STORAGE_KEYS.ENGINEERING_INPUTS);
+                // -- we can save everthing in Indexed It self, no need to save meta data in local storage
             }
-            localStorage.setItem(STORAGE_KEYS.AUTH_STATE, String(state.isEngineeringAuthenticated));
-            localStorage.setItem(STORAGE_KEYS.CURRENT_VIEW, state.currentView)
-        } catch (error) {
-            console.error('Error saving state to localStorage : ', error);
         }
-    }, [state]);
+    }, []);
 
     // Data actions 
     const setCSVData = (data: CSVRow[]) => {
