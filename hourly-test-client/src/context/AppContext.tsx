@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { type CSVRow, type AppContextType, type EngineeringFormData, type AppState } from '../components/common/types';
 import { dbManager } from '../utils/indexedDB';
+import { SatelliteAlt, StarOutline, Store } from '@mui/icons-material';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -46,10 +47,63 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
                 //Load other data from localStorage (small data) -
                 const savedInputs = localStorage.getItem(STORAGE_KEYS.ENGINEERING_INPUTS);
+                const savedTimestamp = localStorage.getItem(STORAGE_KEYS.LAST_FETCH);
+                const savedAuthState = localStorage.getItem(STORAGE_KEYS.AUTH_STATE);
+                const savedView = localStorage.getItem(STORAGE_KEYS.CURRENT_VIEW);
                 // -- we can save everthing in Indexed It self, no need to save meta data in local storage
+
+                setState({
+                    csvData: savedCSVData || [],
+                    engineeringInputs: savedInputs ? JSON.parse(savedInputs) : initialEngineeringInputs,
+                    lastFetchTimestamp: savedTimestamp,
+                    isEngineeringAuthenticated: savedAuthState === 'true'
+                });
+
+                setCurrentView((savedView as any) || 'login');
+
+            } catch (error) {
+                console.error('Error loading initial state: ', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        LoadInitialState();
+    }, []);
+
+    // Save CSV data to IndexedDB (separate from localStorage)
+    useEffect(() => {
+        const saveCsvData = async () => {
+        if (state.csvData.length > 0) {
+            try {
+            await dbManager.saveData('csv_data', state.csvData);
+            console.log(`Saved ${state.csvData.length} records to IndexedDB`);
+            } catch (error) {
+            console.error('Error saving CSV data to IndexedDB: ', error);
             }
         }
-    }, []);
+    };
+    saveCsvData();
+    }, [state.csvData]);
+
+    // Save small data to localStorage
+    useEffect(() => {
+        try {
+            // Only save Small data to local Storage
+            localStorage.setItem(STORAGE_KEYS.ENGINEERING_INPUTS, JSON.stringify(state.engineeringInputs));
+
+            if (state.lastFetchTimestamp) {
+                localStorage.setItem(STORAGE_KEYS.LAST_FETCH, state.lastFetchTimestamp);
+            }
+
+            localStorage.setItem(STORAGE_KEYS.AUTH_STATE, String(state.isEngineeringAuthenticated));
+
+            localStorage.setItem(STORAGE_KEYS.CURRENT_VIEW, currentView);
+        } catch (error) {
+            console.error('Error saving to localStorage: ', error);
+            // if local storage fails, continue - indexedDb has the imp data
+        }
+    }, [state.engineeringInputs, state.lastFetchTimestamp, state.isEngineeringAuthenticated, currentView]);
 
     // Data actions 
     const setCSVData = (data: CSVRow[]) => {
@@ -67,14 +121,18 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }));
     };
 
-    const clearData = () => {
-        setState(prev => ({
-            ...prev,
-            csvData: [],
-            lastFetchTimestamp: null
-        }));
-        localStorage.removeItem(STORAGE_KEYS.CSV_DATA);
-        localStorage.removeItem(STORAGE_KEYS.LAST_FETCH);
+    const clearData = async () => {
+        try {
+            await dbManager.deleteData('csv_data');
+            setState(prev => ({
+                ...prev,
+                csvData: [],
+                lastFetchTimestamp: null
+            }));
+            localStorage.removeItem(STORAGE_KEYS.LAST_FETCH);   
+        } catch (error) {
+           console.error('Error clearing data: ', error);
+        }
     };
 
     const loginEngineering = (password: string): boolean => {
@@ -83,9 +141,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         if (password === correctPassword) {
             setState(prev => ({
                 ...prev,
-                isEngineeringAuthenticated: true,
-                currentView: 'engineering'
+                isEngineeringAuthenticated: true
             }));
+            setCurrentView('engineering');
             return true;
         }
         return false;
@@ -94,31 +152,29 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const logoutEngineering = () => {
         setState(prev => ({
             ...prev,
-            isEngineeringAuthenticated: false,
-            currentView: 'login'
+            isEngineeringAuthenticated: false
         }));
+        setCurrentView('login');
     };
 
     const navigateToProduction = () => {
-        setState(prev => ({
-            ...prev,
-            currentView: 'production'
-        }));
+        setCurrentView('production');
     };
 
     const navigateToEngineering = () => {
-        setState(prev => ({
-            ...prev,
-            currentView: 'engineering'
-        }));
+        setCurrentView('engineering');
     };
 
     const navigateToLogin = () => {
-        setState(prev => ({
-            ...prev,
-            currentView: 'login',
-            isEngineeringAuthenticated: false
-        }));
+        setCurrentView('login');
+    };
+
+    const getStorageInfo = async () => {
+        const size = await dbManager.getStorageSize();
+        return {
+            size,
+            recordCount: state.csvData.length
+        };
     };
 
     const value: AppContextType = {
@@ -130,7 +186,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         logoutEngineering,
         navigateToEngineering,
         navigateToProduction,
-        navigateToLogin
+        navigateToLogin,
+        getStorageInfo
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
