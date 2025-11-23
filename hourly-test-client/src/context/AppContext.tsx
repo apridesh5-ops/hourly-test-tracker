@@ -190,6 +190,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         getStorageInfo
     };
 
+    if (isLoading) {
+        return(
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            Loading...
+        </div>
+        );
+    }
+
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
