@@ -150,7 +150,7 @@ const LoginPage = () => {
     }
 
     return (
-        <Container maxWidth='md'>
+        <Container>
             <Box
                 sx={{
                     minHeight: '100vh',

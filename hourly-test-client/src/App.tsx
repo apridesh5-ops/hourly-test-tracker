@@ -68,7 +68,7 @@ interface User {
   authenticated: boolean
 }
 
-// ToDo - remove router dependencies and tailwind dependencies
+// ToDo - remove react-router dependencies and tailwind dependencies
 
 const AppContext = () => {
   const { currentView } = useAppContext();

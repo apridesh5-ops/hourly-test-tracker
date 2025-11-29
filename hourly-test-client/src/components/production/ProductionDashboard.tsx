@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box,
     Paper,
@@ -63,6 +63,25 @@ const ProductionDashboard = () => {
         }
     ]
 
+    const { getStorageInfo } = useAppContext();
+    const [storageInfo, setStorageInfo] = useState({ size: 0, recordCount: 0 });
+
+    useEffect(() => {
+        const loadInfo = async () => {
+            const info = await getStorageInfo();
+            setStorageInfo(info);
+        };
+    loadInfo();
+    }, []);
+
+    const formatBytes = (bytes: number) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    };
+
     return (
         // ToDo: Make Grid UI better
         <Box sx={{ flexGrow: 1 }}>
@@ -82,10 +101,10 @@ const ProductionDashboard = () => {
                         />
                     )}
 
-                    <Chip
-                        label={`${csvData.length} records`}
+                    <Chip 
+                        label={`${storageInfo.recordCount} records (${formatBytes(storageInfo.size)})`}
                         size="small"
-                        color="secondary"
+                        color="info"
                         sx={{ mr: 2 }}
                     />
 

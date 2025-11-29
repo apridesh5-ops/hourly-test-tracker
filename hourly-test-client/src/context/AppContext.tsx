@@ -179,6 +179,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const value: AppContextType = {
         ...state,
+        currentView,
         setCSVData,
         setEngineeringInputs,
         clearData,

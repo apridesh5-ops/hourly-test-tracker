@@ -46,6 +46,9 @@ export interface EngineeringRequestPayload {
 }
 
 export interface AppContextType extends AppState {
+    // Current View
+    currentView: 'login' | 'engineering' | 'production';
+
     // Data Actions
     setCSVData: (data: CSVRow[]) => void;
     setEngineeringInputs: (inputs: EngineeringFormData) => void;
