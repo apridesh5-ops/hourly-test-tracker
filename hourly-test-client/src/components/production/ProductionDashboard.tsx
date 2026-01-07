@@ -20,27 +20,25 @@ const ProductionDashboard: React.FC = () => {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <h1 style={{ margin: 0 }}>Production Dashboard</h1>
-                
-                <ToggleButtonGroup
-                    value={view}
-                    exclusive
-                    onChange={handleViewChange}
-                    size="small"
-                    sx={{ ml: 2 }}
-                >
-                    <ToggleButton value="table" aria-label="table view">
-                    <TableChart sx={{ mr: 0.5 }} fontSize="small" />
-                    Table
-                    </ToggleButton>
-                    <ToggleButton value="analytics" aria-label="analytics view">
-                    <BarChart sx={{ mr: 0.5 }} fontSize="small" />
-                    Analytics
-                    </ToggleButton>
-                </ToggleButtonGroup>
-                </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3 }}>
+                    <h1 style={{ margin: 0 }}>Production Dashboard</h1>
+                    
+                    <ToggleButtonGroup
+                        value={view}
+                        exclusive
+                        onChange={handleViewChange}
+                        size="small"
+                        sx={{ ml: 2 }}
+                    >
+                        <ToggleButton value="table" aria-label="table view">
+                        <TableChart sx={{ mr: 0.5 }} fontSize="small" />
+                        Table
+                        </ToggleButton>
+                        <ToggleButton value="analytics" aria-label="analytics view">
+                        <BarChart sx={{ mr: 0.5 }} fontSize="small" />
+                        Analytics
+                        </ToggleButton>
+                    </ToggleButtonGroup>
             </Box>
 
             {view === 'table' ? <ProductionTableView /> : <ProductionAnalyticsView />}

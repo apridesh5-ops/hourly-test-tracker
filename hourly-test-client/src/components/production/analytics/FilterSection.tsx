@@ -30,7 +30,8 @@ const FilterSection: React.FC = () => {
                 borderRadius: 2,
                 boxShadow: 1,
                 mb: 3,
-                alignItems: 'center'
+                alignItems: 'center',
+                justifyContent: 'center'
             }}
         >
             <DatePicker 
