@@ -1,7 +1,13 @@
-const ProductionAnalyticsView = () => {
+import React from 'react';
+import { Box } from '@mui/material';
+import FilterSection from './analytics/FilterSection';
+
+const ProductionAnalyticsView: React.FC = () => {
     return (
-        <div></div>
-    )
-}
+        <Box>
+            <FilterSection />
+        </Box>
+    );
+};
 
 export default ProductionAnalyticsView;
