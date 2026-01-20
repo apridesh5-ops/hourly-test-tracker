@@ -36,15 +36,16 @@ Needs password authentication
 
 ## Fields to Display
 
-1. **Input** - Total units tested in a particular hour
-2. **Pass/Output** - Total units passed
+1. **Input** - Total number of records fetched with the applied filters
+2. **Pass/Output** - Number of records whose `Tester_Result` value is `Pass`
 3. **Yield %** - Output / Input * 100
-4. **Retest %** - Retest Unites / Total Input Units * 100
-5. **Fail %** - Fail Units / Total Units Tested * 100
-6. **Top Fail Symptoms** - Most common reasons for failure
-7. **Top Fail Tester IDs** - Which testers failed most
-8. **Top Fail Carrier SNs** - Carrier numbers that failed most
-9. **Total Row** - Shows totals for whole shift/day
+4. **Retest %** 
+5. **Failed Total** - Number of records whose `Tester_Result` value is `Fail` (or) `Input` - `Pass`
+6. **Failed %** -  Failed Total / Input * 100
+7. **Top Fail Symptoms** - Most common reasons for failure
+8. **Top Fail Tester IDs** - Which testers failed most
+9. **Top Fail Carrier SNs** - Carrier numbers that failed most
+10. **Total Row** - Shows totals for whole shift/day
 
 
 

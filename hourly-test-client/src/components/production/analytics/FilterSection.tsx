@@ -48,7 +48,7 @@ const FilterSection: React.FC = () => {
 
             <TextField
                 select
-                label="Shit"
+                label="Shift"
                 value={filters.shift}
                 onChange={(e) => setFilters({ ...filters, shift: e.target.value})}
                 size='small'
@@ -81,7 +81,7 @@ const FilterSection: React.FC = () => {
                     },
                 }}
             >
-                Search
+                Apply
             </Button>
         </Box>
     )

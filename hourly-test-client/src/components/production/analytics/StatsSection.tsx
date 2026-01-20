@@ -19,6 +19,25 @@ interface StationStats {
 const StatsGrid: React.FC = () => {
     const { csvData } = useAppContext();
 
+    // Calculate overall yield
+    const overallYield = useMemo(() => {
+        if (csvData.length === 0) return 0;
+        const passCount = csvData.filter((row) => row.Tester_Result === 'Pass').length;
+        return ((passCount / csvData.length) * 100).toFixed(2);
+    }, [csvData]);
+
+    // Calculate stats by station type (using Script_Name as station identifier)
+    const StationStats = useMemo<StationStats[]>(() => {
+        if (csvData.length === 0) return [];
+        
+        // Group by station type (using Script_Name as station identifier)
+        const grouped = csvData.reduce((acc, row) => {
+            const station = row.Script_Name || 'Unknown';
+
+            
+        })
+    }, [csvData])
+
     const columns: GridColDef[] = [
         {
             field: 'stationType',
@@ -89,7 +108,7 @@ const StatsGrid: React.FC = () => {
         <Paper sx={{ p: 3, boxShadow: 2 }}>
             <Box sx={{ mb: 3, textAlign: 'center' }}>
                 <Typography variant='h4' sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                    100%``
+                    {overallYield}
                 </Typography>
                 <Typography variant="subtitle1" color='text.secondary'>
                     Yeild for all Sites
