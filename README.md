@@ -51,9 +51,3 @@ Needs password authentication
 
 ### Table (Date Grid)
 Visualize rows in table with filter options
-
-#### Columns to display on table
-
-| Column Name | Description                                                                          |  
-| :---------- | :------------------------------------------------------------------------------------|
-| Time        | ****

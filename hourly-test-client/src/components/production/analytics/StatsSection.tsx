@@ -124,6 +124,7 @@ const StatsGrid: React.FC = () => {
             headerAlign: 'center',
             align: 'center',
             type: 'number',
+            valueFormatter: (value: number) => `${value.toFixed(2)}%`
         },
         {
             field: 'fail',
@@ -139,7 +140,8 @@ const StatsGrid: React.FC = () => {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
-            type: 'number',        
+            type: 'number',
+            valueFormatter: (value: number) => `${value.toFixed(2)}%`        
         },
         {
             field: 'retest',
@@ -156,12 +158,13 @@ const StatsGrid: React.FC = () => {
             headerAlign: 'center',
             align: 'center',
             type: 'number',
+            valueFormatter: (value: number) => `${value.toFixed(2)}%`
         },
     ];
 
     return (
-        <Paper sx={{ p: 3, boxShadow: 2 }}>
-            <Box sx={{ mb: 3, textAlign: 'center' }}>
+        <Paper sx={{ p: 3, boxShadow: 2, mb: 3 }}>
+            <Box sx={{ textAlign: 'center' }}>
                 <Typography variant='h4' sx={{ fontWeight: 'bold', color: 'primary.main' }}>
                     {overallYield}%
                 </Typography>

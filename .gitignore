@@ -2,3 +2,4 @@ file-fetching-server/node_modules/
 hourly-test-client/node_modules/
 test-and-reference-files/
 .env
+.DS_Store
