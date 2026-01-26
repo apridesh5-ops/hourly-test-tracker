@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, type ReactNode }
 import { type CSVRow, type AppContextType, type EngineeringFormData, type AppState } from '../components/common/types';
 import { dbManager } from '../utils/indexedDB';
 import { SatelliteAlt, StarOutline, Store } from '@mui/icons-material';
+import { getShiftFromTimeString } from '../utils/shiftHelper';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -107,9 +108,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     // Data actions 
     const setCSVData = (data: CSVRow[]) => {
+        
+        // add computed 'Shift' field to each row
+        const dataWithShift = data.map(row => ({
+            ...row,
+            shift: getShiftFromTimeString(row.Tester_Start_Time),
+        }));
+
         setState(prev => ({
             ...prev,
-            csvData: data,
+            csvData: dataWithShift,
             lastFetchTimestamp: new Date().toISOString()
         }));
     };

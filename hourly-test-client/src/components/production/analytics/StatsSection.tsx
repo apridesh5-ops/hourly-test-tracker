@@ -3,6 +3,7 @@ import { Box, Paper, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { type GridColDef } from '@mui/x-data-grid';
 import { useAppContext } from '../../../context/AppContext';
+import { type CSVRow, type AnalyticsSectionProps } from '../../common/types';
 
 interface StationStats {
     id: String;
@@ -16,8 +17,8 @@ interface StationStats {
     retestPercent: number;
 }
 
-const StatsGrid: React.FC = () => {
-    const { csvData } = useAppContext();
+const StatsGrid: React.FC<AnalyticsSectionProps> = ({ data }) => {
+    const csvData = data
 
     // Calculate overall yield
     const overallYield = useMemo(() => {

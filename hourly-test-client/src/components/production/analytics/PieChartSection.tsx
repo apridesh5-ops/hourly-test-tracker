@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { useAppContext } from '../../../context/AppContext';
+import { type AnalyticsSectionProps } from '../../common/types';
 
 interface ChartData {
   name: string;
@@ -43,8 +44,8 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
   );
 };
 
-export const PieChartSection: React.FC = () => {
-  const { csvData } = useAppContext();
+export const PieChartSection: React.FC<AnalyticsSectionProps> = ({ data }) => {
+  const csvData = data
 
   // Process data for pie chart
   const chartData = useMemo<ChartData[]>(() => {

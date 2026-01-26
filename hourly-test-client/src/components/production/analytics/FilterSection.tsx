@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, MenuItem } from '@mui/material';
-import { Search } from '@mui/icons-material';
+import { Search, Clear } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { type Shift } from '../../../utils/shiftHelper';
 
-interface FilterValues {
+export interface FilterValues {
     date: Date | null;
-    shift: string;
+    shift: string | '';
     testerId: string;
 }
 
-const FilterSection: React.FC = () => {
+interface FilterSectionProps {
+    onFilterChange: (filters: FilterValues) => void;
+}
+
+const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange }) => {
     const [filters, setFilters] = useState<FilterValues>({
         date: new Date(),
         shift: '',
@@ -17,8 +22,17 @@ const FilterSection: React.FC = () => {
     });
 
     const handleSearch = () => {
-        console.log('Search with filters: ', filters);
-    }
+        onFilterChange(filters);
+    };
+
+    const handleClear = () => {
+        const clearedFilters: FilterValues = {
+            date: null,
+            shift: '',
+            testerId: '',
+        };
+        setFilters(clearedFilters);
+    };
 
     return (
         <Box
@@ -50,7 +64,7 @@ const FilterSection: React.FC = () => {
                 select
                 label="Shift"
                 value={filters.shift}
-                onChange={(e) => setFilters({ ...filters, shift: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, shift: e.target.value as Shift | ''})}
                 size='small'
                 sx={{ width: 150 }} 
             >
@@ -83,9 +97,18 @@ const FilterSection: React.FC = () => {
             >
                 Apply
             </Button>
+
+            <Button
+                variant='contained'
+                startIcon={<Clear />}
+                onClick={handleClear}
+                sx={{ px: 3 }}
+            >
+                Clear
+            </Button>
         </Box>
-    )
-}
+    );
+};
 
 
 export default FilterSection;

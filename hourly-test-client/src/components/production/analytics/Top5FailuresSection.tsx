@@ -3,6 +3,7 @@ import { Box, Paper, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { type GridColDef } from '@mui/x-data-grid';
 import { useAppContext } from '../../../context/AppContext';
+import { type CSVRow, type AnalyticsSectionProps } from '../../common/types';
 
 
 interface FailureCount {
@@ -12,8 +13,9 @@ interface FailureCount {
   percentage: number;
 }
 
-export const Top5FailuresSection: React.FC = () => {
-  const { csvData } = useAppContext();
+export const Top5FailuresSection: React.FC<AnalyticsSectionProps> = ({ data }) => {
+  
+  const csvData  = data
 
   // Get only failed records
   const failedRecords = useMemo(() => {

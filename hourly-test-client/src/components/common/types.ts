@@ -1,3 +1,5 @@
+import { type Shift } from '../../utils/shiftHelper';
+
 export interface CSVRow {
     Date?: string;
     Tester_Location?: string;
@@ -13,9 +15,10 @@ export interface CSVRow {
     Script_Name?: string;
     Serial_Number_Name?: string;
     Tester_Duration?: string;
-    Tester_Start_Time?: string;
-    Tester_End_Time?: string;
+    Tester_Start_Time: string;
+    Tester_End_Time: string;
     Record_Time?: string;
+    shift?: Shift
 }
 
 export interface EngineeringFormData {
@@ -43,6 +46,10 @@ export interface EngineeringRequestPayload {
   paths: string[],
   date?: string | null,
   time?: string | null
+}
+
+export interface AnalyticsSectionProps {
+  data: CSVRow[];
 }
 
 export interface AppContextType extends AppState {
