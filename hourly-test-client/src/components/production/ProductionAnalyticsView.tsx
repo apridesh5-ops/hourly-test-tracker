@@ -12,9 +12,11 @@ import { useFilteredData } from '../../hooks/useFilteredData';
 const ProductionAnalyticsView: React.FC = () => {
 
     const { csvData } = useAppContext();
-    
+
     const [filters, setFilters] = useState<FilterValues>({
         date: null,
+        startTime: null,
+        endTime: null,
         shift: '',
         testerId: ''
     });

@@ -1,8 +1,8 @@
-// src/hooks/useFilteredData.ts
 import { useMemo } from 'react';
 import { type CSVRow } from '../components/common/types';
 import { type FilterValues } from '../components/production/analytics/FilterSection'
 import { format } from 'date-fns';
+import { isTimeInRange } from '../utils/timeHelper';
 
 export const useFilteredData = (data: CSVRow[], filters: FilterValues): CSVRow[] => {
   return useMemo(() => {
@@ -14,8 +14,16 @@ export const useFilteredData = (data: CSVRow[], filters: FilterValues): CSVRow[]
       filtered = filtered.filter(row => row.Date === filterDateStr);
     }
 
-    // Filter by Shift
-    if (filters.shift) {
+    // Filter by Time Range (Start Time and End Time)
+    if (filters.startTime || filters.endTime) {
+        filtered = filtered.filter(row => 
+            isTimeInRange(row.Tester_Start_Time, filters.startTime, filters.endTime)
+        );
+    }
+
+    // Filter by Shift (only if time range not specified)
+    // Note: If user specifies both time range and shift, time range takes precedence
+    if (filters.shift && !filters.startTime && !filters.endTime) {
       filtered = filtered.filter(row => row.shift === filters.shift);
     }
 

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, MenuItem } from '@mui/material';
 import { Search, Clear } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { type Shift } from '../../../utils/shiftHelper';
 
 export interface FilterValues {
     date: Date | null;
+    startTime: Date | null;
+    endTime: Date | null;
     shift: string | '';
     testerId: string;
 }
@@ -17,6 +20,8 @@ interface FilterSectionProps {
 const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange }) => {
     const [filters, setFilters] = useState<FilterValues>({
         date: new Date(),
+        startTime: null,
+        endTime: null,
         shift: '',
         testerId: ''
     });
@@ -28,6 +33,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange }) => {
     const handleClear = () => {
         const clearedFilters: FilterValues = {
             date: null,
+            startTime: null,
+            endTime: null,
             shift: '',
             testerId: '',
         };
@@ -58,6 +65,30 @@ const FilterSection: React.FC<FilterSectionProps> = ({ onFilterChange }) => {
                         sx: { width: 200 }
                     }
                 }}
+            />
+
+            <TimePicker
+                label="Start Time"
+                value={filters.startTime}
+                onChange={(newValue: Date | null) => setFilters({ ...filters, startTime: newValue })}
+                slotProps={{
+                    textField: {
+                        size: 'small',
+                        sx: { width: 150 }
+                    },
+                }} 
+            />
+
+            <TimePicker
+                label="End Time"
+                value={filters.endTime}
+                onChange={(newValue: Date | null) => setFilters({ ...filters, endTime: newValue })}
+                slotProps={{
+                    textField: {
+                        size: 'small',
+                        sx: { width: 150 }
+                    },
+                }} 
             />
 
             <TextField
