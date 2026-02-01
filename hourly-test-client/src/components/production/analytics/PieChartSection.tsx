@@ -1,26 +1,26 @@
+// src/components/production/analytics/PieChartSection.tsx
 import React, { useMemo } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { useAppContext } from '../../../context/AppContext';
-import { type AnalyticsSectionProps } from '../../common/types';
+import { type CSVRow } from '../../common/types';
 
 interface ChartData {
   name: string;
   value: number;
+  percentage: number;
   color: string;
 }
 
-// Define colors for each status (based on your design image)
-const STATUS_COLORS: Record<string, string> = {
-  'PASS': '#8BC34A',           // Green
-  'FS CAL': '#9C27B0',         // Purple
-  'RAW': '#2196F3',            // Blue
-  'DISPLAY POWER ON': '#4CAF50', // Light Green
-  'TEST PROBE': '#FF9800',     // Orange
-  'DTN': '#F44336',            // Red
-  'FAIL': '#D32F2F',           // Dark Red
-  'OTHER': '#9E9E9E',          // Grey
-};
+// Define colors for top 5 symptoms + Others
+const CHART_COLORS = [
+  '#9C27B0', // Purple
+  '#E91E63', // Pink
+  '#2196F3', // Blue
+  '#4CAF50', // Green
+  '#FF9800', // Orange
+  '#9E9E9E', // Grey for "Others"
+];
 
 // Custom label to show percentage on pie slices
 const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
@@ -28,6 +28,9 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  // Only show label if percentage is > 3% to avoid clutter
+  if (percent < 0.03) return null;
 
   return (
     <text 
@@ -44,84 +47,94 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
   );
 };
 
-export const PieChartSection: React.FC<AnalyticsSectionProps> = ({ data }) => {
-  const csvData = data
+interface PieChartSectionProps {
+  data: CSVRow[];
+}
 
-  // Process data for pie chart
+export const PieChartSection: React.FC<PieChartSectionProps> = ({ data }) => {
+  // Process data for pie chart - Top 5 Fail Symptoms
   const chartData = useMemo<ChartData[]>(() => {
-    if (csvData.length === 0) return [];
+    // Get only failed records
+    const failedRecords = data.filter(row => row.Tester_Result === 'Fail');
+    
+    if (failedRecords.length === 0) return [];
 
-    // Count occurrences of each error content (for Pass) or test result
-    const statusCounts = csvData.reduce((acc, row) => {
-      let status: string;
-      
-      if (row.Tester_Result === 'Pass') {
-        status = 'PASS';
-      } else if (row.Tester_Result === 'Fail') {
-        // For failures, use the error content to categorize
-        const errorContent = row.Error_Content || 'FAIL';
-        
-        // Map error content to status categories
-        if (errorContent.includes('FS') || errorContent.includes('Cal')) {
-          status = 'FS CAL';
-        } else if (errorContent.includes('RAW')) {
-          status = 'RAW';
-        } else if (errorContent.includes('DISPLAY') || errorContent.includes('POWER')) {
-          status = 'DISPLAY POWER ON';
-        } else if (errorContent.includes('Probe') || errorContent.includes('PROBE')) {
-          status = 'TEST PROBE';
-        } else if (errorContent.includes('DTN')) {
-          status = 'DTN';
-        } else {
-          status = 'FAIL';
-        }
-      } else {
-        status = 'OTHER';
-      }
-
-      acc[status] = (acc[status] || 0) + 1;
+    // Count occurrences of each error symptom
+    const symptomCounts = failedRecords.reduce((acc, row) => {
+      const symptom = row.Error_Content || 'Unknown Error';
+      acc[symptom] = (acc[symptom] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    // Convert to chart data format with colors
-    return Object.entries(statusCounts)
-      .map(([name, value]) => ({
-        name,
-        value,
-        color: STATUS_COLORS[name] || STATUS_COLORS['OTHER'],
+    // Convert to array and sort by count
+    const sortedSymptoms = Object.entries(symptomCounts)
+      .map(([symptom, count]) => ({
+        symptom,
+        count,
       }))
-      .sort((a, b) => b.value - a.value); // Sort by value descending
-  }, [csvData]);
+      .sort((a, b) => b.count - a.count);
 
-  const totalRecords = csvData.length;
+    // Take top 5
+    const top5 = sortedSymptoms.slice(0, 5);
+    
+    // Calculate "Others" (remaining symptoms)
+    const top5Count = top5.reduce((sum, item) => sum + item.count, 0);
+    const othersCount = failedRecords.length - top5Count;
+
+    // Create chart data
+    const chartDataArray: ChartData[] = top5.map((item, index) => ({
+      name: item.symptom,
+      value: item.count,
+      percentage: (item.count / failedRecords.length) * 100,
+      color: CHART_COLORS[index],
+    }));
+
+    // Add "Others" if there are more than 5 symptoms
+    if (othersCount > 0) {
+      chartDataArray.push({
+        name: 'Others',
+        value: othersCount,
+        percentage: (othersCount / failedRecords.length) * 100,
+        color: CHART_COLORS[5],
+      });
+    }
+
+    return chartDataArray;
+  }, [data]);
+
+  const totalFailures = useMemo(() => {
+    return data.filter(row => row.Tester_Result === 'Fail').length;
+  }, [data]);
 
   return (
     <Paper sx={{ p: 3, boxShadow: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
-        {/* Left side - Pie Chart */}
-        <Box sx={{ flex: 1 }}>
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 2, 
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            Graph Status
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          mb: 2, 
+          fontWeight: 'bold',
+          ml: 58
+        }}
+      >
+        Top Fail Symptoms Distribution
+      </Typography>
+
+      {chartData.length === 0 ? (
+        <Box sx={{ 
+          height: 400, 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          color: 'text.secondary' 
+        }}>
+          <Typography variant="body1">
+            No failure data available
           </Typography>
-          
-          {chartData.length === 0 ? (
-            <Box sx={{ 
-              height: 400, 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              color: 'text.secondary' 
-            }}>
-              No data available
-            </Box>
-          ) : (
+        </Box>
+      ) : (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          {/* Left side - Pie Chart */}
+          <Box sx={{ flex: 1 }}>
             <ResponsiveContainer width="100%" height={400}>
               <PieChart>
                 <Pie
@@ -130,7 +143,7 @@ export const PieChartSection: React.FC<AnalyticsSectionProps> = ({ data }) => {
                   cy="50%"
                   labelLine={false}
                   label={renderCustomLabel}
-                  outerRadius={170}
+                  outerRadius={130}
                   fill="#8884d8"
                   dataKey="value"
                 >
@@ -139,63 +152,116 @@ export const PieChartSection: React.FC<AnalyticsSectionProps> = ({ data }) => {
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value: number | undefined) => [
-                    `${value || 0} (${(((value || 0) / totalRecords) * 100).toFixed(2)}%)`,
-                    'Count'
-                  ]}
+                  formatter={(value: number | undefined) => {
+                    if (value === undefined) return ['', 'Failures'];
+                    return [
+                      `${value} (${((value / totalFailures) * 100).toFixed(2)}%)`,
+                      'Failures'
+                    ];
+                  }}
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    padding: '10px',
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
-          )}
-        </Box>
+            
+            {/* Total failures count */}
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                textAlign: 'center', 
+                mt: 1,
+                color: 'text.secondary',
+                fontWeight: 'bold',
+              }}
+            >
+              Total Failures: {totalFailures}
+            </Typography>
+          </Box>
 
-        {/* Right side - Legend with colored boxes */}
-        <Box sx={{ width: 250, mt: 8 }}>
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 2, 
-              fontWeight: 'bold',
-            }}
-          >
-            Legend
-          </Typography>
-          
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-            {chartData.map((item, index) => (
-              <Box 
-                key={index}
-                sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  gap: 1.5,
-                }}
-              >
-                {/* Color box */}
+          {/* Right side - Legend with colored boxes */}
+          <Box sx={{ width: 350 }}>
+            <Typography 
+              variant="subtitle1" 
+              sx={{ 
+                mb: 2, 
+                fontWeight: 'bold',
+                pb: 1,
+                borderBottom: '2px solid',
+                borderColor: 'divider',
+              }}
+            >
+              Legend
+            </Typography>
+            
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              {chartData.map((item, index) => (
                 <Box 
+                  key={index}
                   sx={{ 
-                    width: 40,
-                    height: 40,
-                    bgcolor: item.color,
+                    display: 'flex', 
+                    alignItems: 'center',
+                    gap: 1.5,
+                    p: 1,
                     borderRadius: 1,
-                    flexShrink: 0,
-                  }} 
-                />
-                
-                {/* Label and stats */}
-                <Box sx={{ flex: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    {item.name}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {item.value} ({((item.value / totalRecords) * 100).toFixed(2)}%)
-                  </Typography>
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      bgcolor: 'action.hover',
+                      transform: 'translateX(4px)',
+                    },
+                  }}
+                >
+                  {/* Color box */}
+                  <Box 
+                    sx={{ 
+                      width: 40,
+                      height: 40,
+                      bgcolor: item.color,
+                      borderRadius: 1,
+                      flexShrink: 0,
+                      boxShadow: 1,
+                    }} 
+                  />
+                  
+                  {/* Label and stats */}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        fontWeight: 'bold',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                      title={item.name} // Show full text on hover
+                    >
+                      {item.name}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <Typography variant="caption" color="text.secondary">
+                        {item.value} failures
+                      </Typography>
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          fontWeight: 'bold',
+                          color: 'primary.main',
+                        }}
+                      >
+                        ({item.percentage.toFixed(2)}%)
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
     </Paper>
   );
 };

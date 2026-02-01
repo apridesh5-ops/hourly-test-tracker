@@ -228,7 +228,7 @@ const EngineeringDashboard = () => {
                     </Grid> */}
                   </Paper>
 
-                  <Paper elevation={2} sx={{ p: 4 }}>
+                  {/* <Paper elevation={2} sx={{ p: 4 }}>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                       <FilterList sx={{ mr: 2, color: 'primary.main'}}/>
@@ -257,7 +257,7 @@ const EngineeringDashboard = () => {
                         />
                       </Grid>
                     </Grid>
-                  </Paper>
+                  </Paper> */}
                 </Grid>
 
                 <Grid size={{ xs: 12, lg: 4 }}>

@@ -8,6 +8,8 @@ export const useFilteredData = (data: CSVRow[], filters: FilterValues): CSVRow[]
   return useMemo(() => {
     let filtered = [...data];
 
+    // let filtered = data.filter(row => ['pass', 'fail'].includes(row.Tester_Result?.toLowerCase() ?? ''));
+
     // Filter by Date
     if (filters.date) {
       const filterDateStr = format(filters.date, 'dd/MM/yyyy');
