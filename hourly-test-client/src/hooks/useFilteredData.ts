@@ -12,7 +12,9 @@ export const useFilteredData = (data: CSVRow[], filters: FilterValues): CSVRow[]
 
     // Filter by Date
     if (filters.date) {
-      const filterDateStr = format(filters.date, 'dd/MM/yyyy');
+      console.log("Date : ", filters.date)
+      const filterDateStr = format(filters.date, 'MM/dd/yyyy');
+      console.log("filteredDate : ", filterDateStr)
       filtered = filtered.filter(row => row.Date === filterDateStr);
     }
 

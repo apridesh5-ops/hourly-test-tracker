@@ -118,10 +118,6 @@ const ProductionTableView = () => {
                             Re-fetch
                         </Button>
                     )}
-
-                    <IconButton color='inherit' onClick={navigateToLogin}>
-                        <ArrowBack />
-                    </IconButton>
                 </Toolbar>
             </AppBar>
 

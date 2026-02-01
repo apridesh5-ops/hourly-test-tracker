@@ -18,13 +18,9 @@ import {
 import {
     Logout, 
     Engineering, 
-    FolderOpen, 
     Search,
-    Storage,
-    TextFormatRounded,
-    FilterList 
+    Storage, 
 } from '@mui/icons-material';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { DataTable } from '../common/DataTable';
@@ -39,16 +35,13 @@ interface EngineeringRequestPayload {
 
 const EngineeringDashboard = () => {
     const [error, setError] = useState('');
-    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [showResults, setShowResults] = useState(false);
     const {
       engineeringInputs,
       setEngineeringInputs,
       setCSVData,
       navigateToProduction,
       navigateToLogin,
-      lastFetchTimestamp
     } = useAppContext();
 
     const [formData, setFormData] = useState({
