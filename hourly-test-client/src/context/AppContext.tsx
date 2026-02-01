@@ -47,20 +47,25 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 const savedCSVData = await dbManager.getData('csv_data');
 
                 //Load other data from localStorage (small data) -
-                const savedInputs = localStorage.getItem(STORAGE_KEYS.ENGINEERING_INPUTS);
-                const savedTimestamp = localStorage.getItem(STORAGE_KEYS.LAST_FETCH);
-                const savedAuthState = localStorage.getItem(STORAGE_KEYS.AUTH_STATE);
-                const savedView = localStorage.getItem(STORAGE_KEYS.CURRENT_VIEW);
+                const savedInputs = await dbManager.getData(STORAGE_KEYS.ENGINEERING_INPUTS);
+                const savedTimestamp = await dbManager.getData(STORAGE_KEYS.LAST_FETCH);
+                const savedAuthState = await dbManager.getData(STORAGE_KEYS.AUTH_STATE);
+                const savedView = await dbManager.getData(STORAGE_KEYS.CURRENT_VIEW);
                 // -- we can save everthing in Indexed It self, no need to save meta data in local storage
 
                 setState({
                     csvData: savedCSVData || [],
-                    engineeringInputs: savedInputs ? JSON.parse(savedInputs) : initialEngineeringInputs,
-                    lastFetchTimestamp: savedTimestamp,
-                    isEngineeringAuthenticated: savedAuthState === 'true'
+                    engineeringInputs: savedInputs ? {
+                        ...savedInputs,
+                        // Convert ISO strings back to Date objects
+                        date: savedInputs.date ? new Date(savedInputs.date) : null,
+                        time: savedInputs.time ? new Date(savedInputs.time) : null,
+                    } : initialEngineeringInputs,
+                    lastFetchTimestamp: savedTimestamp || null,
+                    isEngineeringAuthenticated: savedAuthState === true
                 });
 
-                setCurrentView((savedView as any) || 'login');
+                setCurrentView(savedView || 'login');
 
             } catch (error) {
                 console.error('Error loading initial state: ', error);
@@ -87,23 +92,37 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     saveCsvData();
     }, [state.csvData]);
 
-    // Save small data to localStorage
     useEffect(() => {
+    const saveToIndexedDB = async () => {
         try {
-            // Only save Small data to local Storage
-            localStorage.setItem(STORAGE_KEYS.ENGINEERING_INPUTS, JSON.stringify(state.engineeringInputs));
+            // Save engineering inputs
+            await dbManager.saveData(
+                STORAGE_KEYS.ENGINEERING_INPUTS, 
+                {
+                    ...state.engineeringInputs,
+                    // Convert Date objects to ISO strings for IndexedDB
+                    date: state.engineeringInputs.date?.toISOString() || null,
+                    time: state.engineeringInputs.time?.toISOString() || null,
+                }
+            );
 
+            // Save last fetch timestamp
             if (state.lastFetchTimestamp) {
-                localStorage.setItem(STORAGE_KEYS.LAST_FETCH, state.lastFetchTimestamp);
+                await dbManager.saveData(STORAGE_KEYS.LAST_FETCH, state.lastFetchTimestamp);
             }
 
-            localStorage.setItem(STORAGE_KEYS.AUTH_STATE, String(state.isEngineeringAuthenticated));
+            // Save auth state
+            await dbManager.saveData(STORAGE_KEYS.AUTH_STATE, state.isEngineeringAuthenticated);
 
-            localStorage.setItem(STORAGE_KEYS.CURRENT_VIEW, currentView);
+            // Save current view
+            await dbManager.saveData(STORAGE_KEYS.CURRENT_VIEW, currentView);
+
+            console.log('Data saved to IndexedDB successfully');
         } catch (error) {
-            console.error('Error saving to localStorage: ', error);
-            // if local storage fails, continue - indexedDb has the imp data
+            console.error('Error saving to IndexedDB:', error);
         }
+    };
+    saveToIndexedDB();
     }, [state.engineeringInputs, state.lastFetchTimestamp, state.isEngineeringAuthenticated, currentView]);
 
     // Data actions 
@@ -130,17 +149,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const clearData = async () => {
-        try {
-            await dbManager.deleteData('csv_data');
-            setState(prev => ({
-                ...prev,
-                csvData: [],
-                lastFetchTimestamp: null
-            }));
-            localStorage.removeItem(STORAGE_KEYS.LAST_FETCH);   
-        } catch (error) {
-           console.error('Error clearing data: ', error);
-        }
+    try {
+        await dbManager.deleteData('csv_data');
+        await dbManager.deleteData(STORAGE_KEYS.LAST_FETCH);
+        setState(prev => ({
+            ...prev,
+            csvData: [],
+            lastFetchTimestamp: null
+        }));
+    } catch (error) {
+       console.error('Error clearing data: ', error);
+    }
     };
 
     const loginEngineering = (password: string): boolean => {

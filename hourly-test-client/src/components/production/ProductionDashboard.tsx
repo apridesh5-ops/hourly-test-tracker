@@ -5,14 +5,14 @@ import {
     ToggleButton,
     Button
 } from "@mui/material";
-import { TableChart, BarChart, ArrowBack } from '@mui/icons-material';
+import { TableChart, BarChart, ArrowBack, Logout } from '@mui/icons-material';
 import ProductionTableView from './ProductionTableView';
 import ProductionAnalyticsView from './ProductionAnalyticsView';
 import { useAppContext } from '../../context/AppContext';
 
 
 const ProductionDashboard: React.FC = () => {
-    const { navigateToEngineering } = useAppContext();
+    const { navigateToEngineering, navigateToLogin } = useAppContext();
     const [view, setView] = useState<'analytics' | 'table'>('analytics');
 
     const handleViewChange = (_: React.MouseEvent<HTMLElement>, newView: 'table' | 'analytics' | null) => {
@@ -53,6 +53,19 @@ const ProductionDashboard: React.FC = () => {
                         }}
                         >
                         Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<Logout />}
+                        onClick={navigateToLogin}
+                        sx={{ 
+                            bgcolor: 'primary.main',
+                            '&:hover': {
+                            bgcolor: 'primary.dark',
+                            }
+                        }}
+                        >
+                        Logout
                     </Button>
             </Box>
 
