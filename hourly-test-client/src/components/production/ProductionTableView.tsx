@@ -57,8 +57,48 @@ const ProductionTableView = () => {
             width: 150
         },
         {
-            field: 'Error_Content',
-            headerName: 'Error Content',
+            field: 'Carrier_SN',
+            headerName: 'Carrier SN',
+            width: 250
+        },
+        {
+            field: 'DUT_SN',
+            headerName: 'DUT SN',
+            width: 250
+        },
+        {
+            field: 'Error_Code',
+            headerName: 'Error Code',
+            width: 150
+        },
+        {
+            field: 'TesterIP',
+            headerName: 'Tester IP',
+            width: 150
+        },
+        {
+            field: 'Project_Name',
+            headerName: 'Project Name',
+            width: 200
+        },
+        {
+            field: 'Script_Name',
+            headerName: 'Script Name',
+            width: 150
+        },
+        {
+            field: 'Serial_Number_Name',
+            headerName: 'Serial Number Name',
+            width: 200
+        },
+        {
+            field: 'Tester_Duration',
+            headerName: 'Tester Duration',
+            width: 200
+        },
+        {
+            field: 'Record_Time',
+            headerName: 'Record Time',
             width: 250
         }
     ]
@@ -89,7 +129,7 @@ const ProductionTableView = () => {
                 <Toolbar>
                     <Group sx={{ mr: 2 }} />
                     <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                        Production Dashboard
+                        Production Table View
                     </Typography>
 
                     {lastFetchTimestamp && (
@@ -133,13 +173,10 @@ const ProductionTableView = () => {
                         </Alert>
                     ) : (
                         <>
-                            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between'}}>
+                            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'left'}}>
                                 <Typography variant='h6'>
                                     Test Results
                                 </Typography>
-                                <Button startIcon={<Download />} onClick={() => {}}>
-                                    Export CSV
-                                </Button>
                             </Box>
 
                             <Card>
