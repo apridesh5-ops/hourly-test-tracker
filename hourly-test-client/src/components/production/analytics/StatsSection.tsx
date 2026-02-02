@@ -275,8 +275,8 @@ const StatsGrid: React.FC<StatsGridProps> = ({ data, filters }) => {
 
     return (
         <Paper sx={{ p: 3, boxShadow: 2, mb: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', mb: 3 }}>
-                <Box sx={{ textAlign: 'center', flex: 1 }}>
+            <Box>          
+                <Box sx={{ textAlign: 'center', flex: 1, mb: 2 }}>
                     <Typography variant='h4' sx={{ fontWeight: 'bold', color: 'primary.main' }}>
                         {overallMetrics.yield.toFixed(2)}%
                     </Typography>
@@ -287,6 +287,21 @@ const StatsGrid: React.FC<StatsGridProps> = ({ data, filters }) => {
                         Input: {overallMetrics.input} | Pass: {overallMetrics.pass} | 
                         Fail: {overallMetrics.fail} | Retest: {overallMetrics.retest}
                     </Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<Download />}
+                        onClick={handleExport}
+                        size="small"
+                        sx={{
+                            mt: 2, 
+                            background: 'linear-gradient(45deg, #9C27B0 30%, #E91E63 90%)',
+                            '&:hover': {
+                                background: 'linear-gradient(45deg, #7B1FA2 30%, #C2185B 90%)',
+                            }
+                        }}
+                    >
+                        Export
+                    </Button>
                 </Box>
             </Box>
 
