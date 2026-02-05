@@ -163,7 +163,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const loginEngineering = (password: string): boolean => {
-        const correctPassword = 'admin123'; // ToDo Store in env variable
+        const correctPassword = 'Test@123'; // ToDo Store in env variable
 
         if (password === correctPassword) {
             setState(prev => ({
