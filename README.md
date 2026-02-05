@@ -1,49 +1,465 @@
 # Hourly Test Tracker
 
-## Logins
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-98.6%25-blue" alt="TypeScript">
+  <img src="https://shields.io/badge/React-18.x-61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/Material--UI-5.x-0081CB" alt="MUI">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+</p>
 
-### Engineering Login (Admin User)
-Needs password authentication
+> **A desktop application for analyzing production test data with real-time analytics, offline storage, and multi-machine CSV file aggregation.**
 
-#### Input Page
+***
 
-1. **Path Section**
-    * Contains four input fields and each accepts only the path string as the input. For example in format like UNC (Universal Naming convention).
-2. **Input Fields**
-    * **Set Date** - Fetch only the records in given specific date.
-    * **Set Time** - Fetch only the records whose time should be greater than or equal to the given time.
-3. **Submit** - On submit should fetch only the records by the give time and date. And redirect to the production dashboard page which has the table with all the fields and data.
+## 📋 Table of Contents
 
+- [Overview](#overview)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [Usage Guide](#usage-guide)
+  - [Engineering Login](#engineering-login)
+  - [Production Dashboard](#production-dashboard)
+- [Data Model](#data-model)
+- [Architecture](#architecture)
+- [Building for Production](#building-for-production)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Production Login (public user)
-#### Input Form (search parameters)
-1. Date
-2. Start Time
-3. End Time
-4. Test Id instead of Carrier SN
-5. Shit (A / B / C)
-6. Search Button
+***
 
-# Requirements
+## 🎯 Overview
 
-## Logins
-- Engineering login is only ment for providing the file paths and setting the preffered date and time filters and apply fetch/search. It should be authenticated by password.
-- Production login is meant for viewing and interacting with the user requested data by applying required filters and visualizing. When the user enters the fetch/search button from engineering login they'll be redirected to the production view page.
-  
-## To maintain the state
-- Once the data has been fetched from the backend with the preffered date and time, it should be available through out the session until the user refreshes the page or he again fetches the data from engineering login. eventhough we logout and and login again to the production login, the data shouldn't be vanished, it should be same as we left before.
--  In engineering login after we enter the path and apply the fetch/submit button, we'll be redirected to the production page. suppose if we want to view the applied paths, the paths won't be there after we try to view them by engineering login. so another requirement is the applied paths should be available in the input fields through out the session util refresh
+**Hourly Test Tracker** is a production analytics tool designed for manufacturing environments where test machines generate CSV output files. The application aggregates data from multiple test stations, calculates key performance metrics (yield, pass/fail rates, retest counts), and provides interactive visualizations for production monitoring.
 
+### Key Capabilities
 
+- **Multi-machine data aggregation** from network paths (UNC format)
+- **Offline-first architecture** using IndexedDB for data persistence
+- **Real-time analytics** with dynamic filtering by date, time, shift, and tester ID
+- **Role-based access** with Engineering (admin) and Production (viewer) roles
+- **Export functionality** for filtered analytics data
 
-### Table (Date Grid)
-Visualize rows in table with filter options
+***
 
+## ✨ Features
 
-### Stats Grid 
+### Engineering View (Admin)
+- 🔐 Password-protected authentication
+- 📁 Configure up to 4 machine CSV file paths (UNC format)
+- 📅 Set date and time filters for data fetching
+- 💾 Persistent path and filter storage across sessions
+- 🔄 Manual data refresh with timestamp tracking
 
-1. **Input** - COUNT(UNIQUE DUT_SN)
-2. **Pass** - COUNT(UNIQUE DUT_SN Where Tester Result is 'Pass')
-3. **Yeild %** - Pass / Input * 100
-4. **Fail** - Input - Pass
-5. **Retest** - Total Records - Input
+### Production Dashboard
+- 📊 **Stats Grid**: Key metrics (Input, Pass, Yield %, Fail, Retest) by station
+- 🔍 **Advanced Filters**: Date range, time range, shift (A/B/C), Tester ID
+- 📉 **Top 5 Failures Analysis**: Most common error codes and content
+- 🥧 **Pie Chart Visualization**: Pass/Fail distribution
+- 📤 **CSV Export**: Export filtered analytics with applied filter metadata
+- 🌐 **Offline Operation**: View cached data without network connectivity
+
+### Data Management
+- 🗄️ **IndexedDB Storage**: Automatic caching for offline access
+- 🔄 **Session Persistence**: Data survives page refresh and re-login
+- 📈 **Large Dataset Support**: Handles thousands of test records efficiently
+
+***
+
+## 📸 Screenshots
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+***
+
+## 🛠️ Technology Stack
+
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | React 18, TypeScript, Material-UI (MUI) |
+| **Backend** | Express.js |
+| **Data Grid** | MUI DataGrid |
+| **Storage** | IndexedDB (via custom dbManager) |
+| **State Management** | React Context API |
+| **Date/Time** | date-fns |
+| **Build Tool** | Vite |
+| **Desktop Packaging** | Electron (optional, for standalone app) |
+
+***
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 16.x or higher ([Download](https://nodejs.org/))
+- **npm** 8.x or higher (comes with Node.js)
+- **Git** ([Download](https://git-scm.com/))
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/GokulAjithV/hourly-test-tracker.git
+   cd hourly-test-tracker
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+### Running the Application
+
+#### Development Mode (Browser)
+```bash
+npm start
+```
+Opens at `http://localhost:3000`
+
+#### Production Build
+```bash
+npm run build
+```
+Creates optimized build in `build/` folder.
+
+#### Desktop Application (Electron)
+```bash
+# Install Electron dependencies
+npm install --save-dev electron electron-builder concurrently wait-on cross-env electron-is-dev
+
+# Run in Electron
+npm run electron-dev
+
+# Build standalone app
+npm run electron-build-win  # Windows
+npm run electron-build-mac  # macOS
+npm run electron-build-linux # Linux
+```
+
+***
+
+## 📖 Usage Guide
+
+### Engineering Login
+
+**Purpose**: Configure data sources and fetch test records.
+
+#### Step 1: Authentication
+- Navigate to Engineering Login
+- Enter password: `*******` (default)
+- Click **Login**
+
+#### Step 2: Configure Paths
+Enter CSV file paths in UNC format for up to 4 machines:
+```
+\\192.168.1.101\test-data\machine1\output.csv
+\\192.168.1.102\test-data\machine2\output.csv
+\\192.168.1.103\test-data\machine3\output.csv
+\\192.168.1.104\test-data\machine4\output.csv
+```
+
+#### Step 3: Set Filters
+- **Date**: Select specific date for data extraction
+- **Time**: Set minimum time threshold (records >= this time)
+
+#### Step 4: Fetch Data
+- Click **Fetch Data**
+- Application reads CSV files from all configured paths
+- Merges data and stores in IndexedDB
+- Auto-redirects to Production Dashboard
+
+**Note**: Paths and filters are saved automatically and persist across sessions.
+
+***
+
+### Production Dashboard
+
+**Purpose**: Analyze test data with interactive filters and visualizations.
+
+#### Analytics Sections
+
+**1. Stats Grid**
+
+Displays aggregated metrics per station:
+
+| Metric | Formula | Description |
+|--------|---------|-------------|
+| **Input** | `COUNT(UNIQUE DUT_SN)` | Unique units tested |
+| **Pass** | `COUNT(UNIQUE DUT_SN WHERE Tester_Result = 'Pass')` | Units that passed (at least once) |
+| **Yield %** | `(Pass / Input) × 100` | Pass rate percentage |
+| **Fail** | `Input - Pass` | Units that never passed |
+| **Retest** | `Total Records - Input` | Additional test attempts |
+
+**Export Feature**: Click "Export" to download filtered stats as CSV with filter metadata.
+
+**2. Filter Section**
+
+Apply filters to narrow down data:
+- **Date**: Specific date
+- **Start Time / End Time**: Time range
+- **Shift**: A / B / C
+- **Tester ID**: Specific tester machine
+
+**3. Top 5 Failures Analysis**
+
+Shows most common failure reasons:
+- Error codes frequency
+- Error content descriptions
+- Failure count per error type
+
+**4. Pass/Fail Pie Chart**
+
+Visual representation of overall pass/fail distribution.
+
+***
+
+## 📊 Data Model
+
+### CSV File Structure
+
+Expected CSV columns:
+
+```csv
+Date,Tester_Location,Tester_Result,NG_Qty,TesterID,Carrier_SN,DUT_SN,Error_Code,Error_Content,TesterIP,Project_Name,Script_Name,Serial_Number_Name,Tester_Duration,Tester_Start_Time,Tester_End_Time,Record_Time
+```
+
+**Key Fields**:
+- `DUT_SN`: Device Under Test Serial Number (unique identifier)
+- `Tester_Result`: `Pass` or `Fail`
+- `Tester_Start_Time`: Test execution timestamp
+- `Error_Code` / `Error_Content`: Failure diagnostics
+
+### IndexedDB Schema
+
+**Database**: `HourlyTrackerDB`
+
+**Object Stores**:
+- `csv_data`: Raw test records array
+- `hourly_tracker_engineering_inputs`: Path configurations
+- `hourly_tracker_last_fetch`: Last data fetch timestamp
+- `hourly_tracker_auth_state`: Authentication status
+- `hourly_tracker_current_view`: Current view state
+
+***
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│                   React Frontend                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐│
+│  │ Engineering  │  │  Production  │  │  Context   ││
+│  │   Login      │  │  Dashboard   │  │   API      ││
+│  └──────────────┘  └──────────────┘  └────────────┘│
+└─────────────────────────────────────────────────────┘
+                         ↓↑
+┌─────────────────────────────────────────────────────┐
+│              IndexedDB (Local Storage)               │
+│  - CSV Data Cache                                    │
+│  - Configuration                                     │
+│  - Session State                                     │
+└─────────────────────────────────────────────────────┘
+                         ↓↑
+┌─────────────────────────────────────────────────────┐
+│          Network File System (UNC Paths)             │
+│  Machine 1: \\192.168.1.101\data\output.csv        │
+│  Machine 2: \\192.168.1.102\data\output.csv        │
+│  Machine 3: \\192.168.1.103\data\output.csv        │
+│  Machine 4: \\192.168.1.104\data\output.csv        │
+└─────────────────────────────────────────────────────┘
+```
+
+### Key Components
+
+- **AppContext.tsx**: Global state management (data, filters, auth)
+- **indexedDB.ts**: Database operations (save, retrieve, delete)
+- **useFilteredData.ts**: Custom hook for data filtering
+- **StatsGrid.tsx**: Analytics metrics calculation and display
+- **FilterSection.tsx**: Filter UI and state management
+
+***
+
+## 🔨 Building for Production
+
+### Web Application
+
+```bash
+# Create optimized build
+npm run build
+
+# Deploy to web server
+# Copy contents of build/ folder to server
+```
+
+### Desktop Application (Electron)
+
+```bash
+# Windows
+npm run electron-build-win
+# Output: dist/Hourly-Test-Tracker-Setup-1.0.0.exe
+
+# macOS
+npm run electron-build-mac
+# Output: dist/Hourly-Test-Tracker-1.0.0.dmg
+
+# Linux
+npm run electron-build-linux
+# Output: dist/Hourly-Test-Tracker-1.0.0.AppImage
+```
+
+**Installer includes**:
+- ✅ Self-contained Node.js runtime
+- ✅ Chromium browser engine
+- ✅ All dependencies bundled
+- ✅ Desktop shortcut and Start Menu entry
+
+**End users do NOT need Node.js installed!**
+
+***
+
+## 📦 Deployment
+
+### Option 1: Network Share
+```
+\\company-server\applications\Hourly-Test-Tracker-Setup.exe
+```
+Users install from shared network folder.
+
+### Option 2: Portable Version
+Build as portable (no installation required):
+```json
+// package.json
+"build": {
+  "win": {
+    "target": ["portable"]
+  }
+}
+```
+
+### Option 3: Auto-Update (Electron)
+Configure automatic updates via GitHub releases or internal server:
+```javascript
+// public/electron.js
+const { autoUpdater } = require('electron-updater');
+autoUpdater.checkForUpdatesAndNotify();
+```
+
+***
+
+## 🔧 Troubleshooting
+
+### Issue: Cannot fetch CSV files from network paths
+
+**Solution**: 
+- Ensure network paths are accessible (test with Windows Explorer: `\\192.168.1.101\...`)
+- Check file share permissions
+- Verify CSV file format matches expected structure
+
+### Issue: Data not persisting after refresh
+
+**Solution**:
+- Check browser/app IndexedDB storage (DevTools → Application → IndexedDB)
+- Clear IndexedDB and re-fetch data
+- Ensure `dbManager.initDB()` completes successfully
+
+### Issue: Electron app won't start
+
+**Solution**:
+- Check logs in: `%APPDATA%\hourly-test-tracker\logs`
+- Rebuild: `npm run electron-build-win`
+- Run in dev mode: `npm run electron-dev` to see console errors
+
+### Issue: Incorrect metrics calculation
+
+**Solution**:
+- Verify CSV contains `DUT_SN` and `Tester_Result` columns
+- Check for duplicate or missing `DUT_SN` values
+- Review formulas in `StatsGrid.tsx`
+
+***
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+**Code Standards**:
+- TypeScript strict mode
+- ESLint compliant
+- Component documentation
+- Unit tests for critical functions
+
+***
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+***
+
+## 👥 Authors
+
+**Gokul Ajith V**  
+GitHub: [@GokulAjithV](https://github.com/GokulAjithV)
+
+***
+
+## 🙏 Acknowledgments
+
+- Material-UI for component library
+- React community for excellent documentation
+- Electron team for desktop app framework
+- date-fns for date manipulation utilities
+
+***
+
+## 📞 Support
+
+For issues, questions, or feature requests:
+- Open an issue: [GitHub Issues](https://github.com/GokulAjithV/hourly-test-tracker/issues)
+- Email: [your-email@example.com]
+
+***
+
+## 📈 Roadmap
+
+- [ ] Multi-language support (Tamil, Hindi)
+- [ ] Real-time data sync (WebSocket)
+- [ ] Advanced charts (trend analysis, time-series)
+- [ ] PDF report generation
+- [ ] User role management
+- [ ] Dark mode theme
+- [ ] Mobile responsive design
+- [ ] REST API for external integrations
+
+***
+
+**Last Updated**: February 5, 2026  
+**Version**: 1.0.0
+
+***
+
+<p align="center">Made with ❤️ for production teams</p>
