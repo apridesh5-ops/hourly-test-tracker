@@ -74,19 +74,20 @@
 
 ## 📸 Screenshots
 
-![alt text](image.png)
+<img width="1919" height="864" alt="image" src="https://github.com/user-attachments/assets/4d45f3c4-a89a-4b94-b703-323ea98d9459" />
 
-![alt text](image-1.png)
+<img width="1919" height="851" alt="image" src="https://github.com/user-attachments/assets/6d047e1a-491c-4ca9-9c54-4caf56a4c161" />
 
-![alt text](image-2.png)
+<img width="1919" height="863" alt="image" src="https://github.com/user-attachments/assets/3a4ee8fe-aabe-45a1-9927-c74a2e940d32" />
 
-![alt text](image-3.png)
+<img width="1895" height="864" alt="image" src="https://github.com/user-attachments/assets/8099eed6-afb6-46d6-814f-fefefefc482c" />
 
-![alt text](image-4.png)
+<img width="1895" height="856" alt="image" src="https://github.com/user-attachments/assets/49318c4c-221f-470e-869d-57b7bbf5efc2" />
 
-![alt text](image-5.png)
+<img width="1899" height="843" alt="image" src="https://github.com/user-attachments/assets/1c626018-e99d-401f-a640-103ca9cd8b4d" />
 
-![alt text](image-6.png)
+<img width="1892" height="863" alt="image" src="https://github.com/user-attachments/assets/06d9b7fa-d660-4756-be40-d19b1c7bd914" />
+
 
 ***
 
