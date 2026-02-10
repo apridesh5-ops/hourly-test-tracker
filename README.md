@@ -1,7 +1,7 @@
 # Hourly Test Tracker
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TypeScript-98.6%25-blue" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TypeScript-96.9%25-blue" alt="TypeScript">
   <img src="https://shields.io/badge/React-18.x-61DAFB" alt="React">
   <img src="https://img.shields.io/badge/Material--UI-5.x-0081CB" alt="MUI">
   <img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=fff&style=flat">
