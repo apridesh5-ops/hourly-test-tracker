@@ -1,6 +1,7 @@
 import { type CSVRow } from "../components/common/types";
+import { API_BASE_URL } from "./config";
 
-const base_url = 'http://localhost:3000';
+// const base_url = 'http://localhost:3000';
 
 export interface EngineeringRequest {
     paths: string[];
@@ -8,19 +9,19 @@ export interface EngineeringRequest {
     time?: string | null;
 }
 
-interface ProductionRequest {
-    date?: string;
-    startTime?: string;
-    endTime?: string;
-    testId?: string;
-    shift?: 'A' | 'B' | 'C' | '';
-}
+// interface ProductionRequest {
+//     date?: string;
+//     startTime?: string;
+//     endTime?: string;
+//     testId?: string;
+//     shift?: 'A' | 'B' | 'C' | '';
+// }
 
 export class ApiService {
     // Engineering API - fetch data from multiple machines
     static async fetchEngineeringData(params: EngineeringRequest): Promise<CSVRow[]> {
         try {
-            const response = await fetch(`${base_url}/fetch-csvs`, {
+            const response = await fetch(`${API_BASE_URL}/fetch-csvs`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { type CSVRow, type AppContextType, type EngineeringFormData, type AppState } from '../components/common/types';
 import { dbManager } from '../utils/indexedDB';
-import { SatelliteAlt, StarOutline, Store } from '@mui/icons-material';
 import { getShiftFromTimeString } from '../utils/shiftHelper';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);

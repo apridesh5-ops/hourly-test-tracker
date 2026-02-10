@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { type GridColDef } from '@mui/x-data-grid';
-import { useAppContext } from '../../../context/AppContext';
-import { type CSVRow, type AnalyticsSectionProps } from '../../common/types';
+import { type AnalyticsSectionProps } from '../../common/types';
 
 
 interface FailureCount {

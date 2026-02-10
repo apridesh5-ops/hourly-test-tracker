@@ -63,10 +63,10 @@ const theme = createTheme({
     ],
   })
 
-interface User {
-  type: 'engineering' | 'production' | null;
-  authenticated: boolean
-}
+// interface User {
+//   type: 'engineering' | 'production' | null;
+//   authenticated: boolean
+// }
 
 // ToDo - remove react-router dependencies and tailwind dependencies
 

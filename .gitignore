@@ -1,5 +1,8 @@
 file-fetching-server/node_modules/
 hourly-test-client/node_modules/
+electron-app/node_modules/
+electron-app/backend/node_modules/
+electron-app/dist/
 test-and-reference-files/
 .env
 .DS_Store

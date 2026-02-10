@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
     Box,
-    Paper,
     Typography,
     Button,
     AppBar,
     Toolbar,
-    IconButton,
     Chip,
     Container, 
     Alert,
@@ -14,7 +12,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getGridDateOperators, type GridColDef } from '@mui/x-data-grid';
-import { ArrowBack, Download, Refresh, Group } from '@mui/icons-material';
+import { Refresh, Group } from '@mui/icons-material';
 import { useAppContext } from '../../context/AppContext';
 
 
@@ -22,13 +20,11 @@ const ProductionTableView = () => {
     const {
         csvData,
         lastFetchTimestamp,
-        navigateToLogin,
         navigateToEngineering,
         isEngineeringAuthenticated,
-        clearData
     } = useAppContext();
 
-    const [filteredData, setFilteredData] = useState(csvData);
+    const filteredData = csvData;
 
     const getRowId = (row: any) => {
         return `${row.TesterID}_${row.Date}_${row.Tester_Start_Time}`.replace(/[^a-zA-Z0-9]/g, '_');

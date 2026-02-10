@@ -1,6 +1,3 @@
-import { type CSVRow } from "../components/common/types";
-
-
 const DB_NAME = 'HourlyTestTrackerDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'csvData';

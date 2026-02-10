@@ -25,7 +25,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const loading = false
     const [showEngineerigLogin, setShowEngineeringLogin] = useState(false);
 
     const handleEngineeringLogin = (e: React.FormEvent) => {

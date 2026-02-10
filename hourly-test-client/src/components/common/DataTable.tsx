@@ -1,10 +1,8 @@
-import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
     Box,
     Paper,
     Typography,
-    Button,
     AppBar,
     Toolbar,
     IconButton,
@@ -12,18 +10,18 @@ import {
 } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getGridDateOperators, type GridColDef } from '@mui/x-data-grid';
-import { ArrowBack, Download, Engineering, Group } from '@mui/icons-material';
+import { ArrowBack, Engineering, Group } from '@mui/icons-material';
 
-interface DataTableProps {
-    data: any[];
-    onBack: () => void;
-    userType: 'engineering' | 'production';
-}
+// interface DataTableProps {
+//     data: any[];
+//     onBack: () => void;
+//     userType: 'engineering' | 'production';
+// }
 
 const DataTable = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { data, userType, searchParams } = location.state || {}
+    const { data, userType } = location.state || {}
     
     const onBack = () => {
         navigate("/" + userType)

@@ -1,8 +1,7 @@
 // src/components/production/analytics/PieChartSection.tsx
 import React, { useMemo } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import { useAppContext } from '../../../context/AppContext';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { type CSVRow } from '../../common/types';
 
 interface ChartData {
