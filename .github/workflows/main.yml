@@ -1,0 +1,50 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Build Frontend
+        run: |
+          cd hourly-test-client
+          npm install
+          npm run build
+
+      - name: Build Backend
+        run: |
+          cd file-fetching-server
+          npm install
+          npm run build
+
+      - name: Prepare Electron
+        run: |
+          cd electron-app
+          npm install
+          rmdir frontend /s /q
+          mkdir frontend
+          xcopy ..\hourly-test-client\dist frontend /E /I
+          rmdir backend /s /q
+          mkdir backend\dist
+          xcopy ..\file-fetching-server\dist backend\dist /E /I
+
+      - name: Build EXE
+        run: |
+          cd electron-app
+          npm run build-win
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows-EXE
+          path: electron-app/dist/
