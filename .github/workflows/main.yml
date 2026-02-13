@@ -29,15 +29,16 @@ jobs:
           npm run build
 
       - name: Prepare Electron
+        shell: cmd
         run: |
           cd electron-app
           npm install
-          rmdir frontend /s /q
+          rmdir /s /q frontend
           mkdir frontend
-          xcopy ..\hourly-test-client\dist frontend /E /I
-          rmdir backend /s /q
+          xcopy ..\hourly-test-client\dist frontend /E /I /Y
+          rmdir /s /q backend
           mkdir backend\dist
-          xcopy ..\file-fetching-server\dist backend\dist /E /I
+          xcopy ..\file-fetching-server\dist backend\dist /E /I /Y
 
       - name: Build EXE
         run: |
